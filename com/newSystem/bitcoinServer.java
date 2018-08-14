@@ -38,7 +38,7 @@ public class bitcoinServer extends Thread {
                 case 2:
                     // method:2 --> track_product
                     String pid_to_track = params.get("pid");
-                    response.append(MainFrame.bitcoinJSONRPCClient.track_product(Integer.valueOf(pid_to_track)));
+                    response.append(MainFrame.bitcoinJSONRPCClient.track_product(pid_to_track));
                     break;
             }
             writeResponse(httpExchange, response.toString());

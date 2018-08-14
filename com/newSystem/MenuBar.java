@@ -1,7 +1,7 @@
 package com.newSystem;
 
 import com.newSystem.Bitcoins.Bitcoind;
-import com.newSystem.Dialogs.DialogDefaultPanel;
+import com.newSystem.QRCode.QRMaker;
 
 import javax.swing.*;
 import java.awt.*;

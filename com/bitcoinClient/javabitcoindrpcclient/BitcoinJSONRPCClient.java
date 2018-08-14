@@ -2173,7 +2173,7 @@ public class BitcoinJSONRPCClient implements BitcoindRpcClient {
     }
 
     @Override
-    public boolean find_product(long id, long countryCode, long zipCode) {
+    public boolean find_product(String id, long countryCode, long zipCode) {
         return (boolean) query("find_product", id, countryCode, zipCode);
 
     }
@@ -2220,14 +2220,13 @@ public class BitcoinJSONRPCClient implements BitcoindRpcClient {
     }
 
     @Override
-    public String send_to_address(String address, String id) {
+    public String send_to_address(String address, String pid) {
         //StringBuffer sb = new StringBuffer();
         //sb.append("{\"ID\":" + id);
         //sb.append(",\"countryCode\":" + countryCode);
         //sb.append(",\"zipCode\":" + zipCode + "}");
         //Object productObj = CrippledJavaScriptParser.parseJSExpr(sb.toString());
-        int productID = Integer.valueOf(id);
-        return (String) query("send_to_address", address, productID);
+        return (String) query("send_to_address", address, pid);
     }
 
     public java.util.ArrayList<String> send_many(String address, String products){
@@ -2250,7 +2249,7 @@ public class BitcoinJSONRPCClient implements BitcoindRpcClient {
     }
 
     @Override
-    public List<String> track_product(int pid) {
+    public List<String> track_product(String pid) {
         return (List<String>) query("track_product", pid);
     }
 }

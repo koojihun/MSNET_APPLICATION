@@ -249,7 +249,7 @@ public class DialogDefaultPanel extends JPanel {
                     JOptionPane.showMessageDialog(null, "Insert Product ID.", "Message", JOptionPane.WARNING_MESSAGE);
                 } else {
                     try {
-                        java.util.List<String> result = MainFrame.bitcoinJSONRPCClient.track_product(Integer.valueOf(id));
+                        java.util.List<String> result = MainFrame.bitcoinJSONRPCClient.track_product(id);
                         ListIterator<String> itr = result.listIterator(result.size()); // reverse order로 iterate 함.
                         int cnt = 1;
                         String[] firstRow = {String.valueOf(cnt++), "", "Producer"}; // [No, Time, Sender] 순으로 출력

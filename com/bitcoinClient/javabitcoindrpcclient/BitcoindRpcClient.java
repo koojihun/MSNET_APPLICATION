@@ -1582,7 +1582,7 @@ public interface BitcoindRpcClient {
    * Must be called before set_generate
    */
   void gen_new_product(String countryCode, String zipCode);
-  boolean find_product(long id, long countryCode, long zipCode);
+  boolean find_product(String id, long countryCode, long zipCode);
   /**
    * For MSNet - Added by Juhan
    * Mining
@@ -1611,7 +1611,7 @@ public interface BitcoindRpcClient {
 
   List<Map> list_received_by_address();
 
-  List<String> track_product(int pid);
+  List<String> track_product(String pid);
 
   List<Map> enumerate_account_info();
 
