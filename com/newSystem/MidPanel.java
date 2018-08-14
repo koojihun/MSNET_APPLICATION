@@ -37,11 +37,6 @@ public class MidPanel extends JPanel {
     private JTextField addressTextField;
     private JButton sendButton;
     ////////////////////////////
-    private int[] selectedRowsIndex;
-    private String[] ID;
-    private String[] CountryCode;
-    private String[] ZipCode;
-    ////////////////////////////
     private String address;
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private JPanel bitcoindPanel; // bincoind
@@ -73,7 +68,7 @@ public class MidPanel extends JPanel {
         tabbedPane.setBackgroundAt(2, Color.WHITE);
 
         // Make Uneditable.
-        productTable.setDefaultEditor(Object.class, null);
+        //productTable.setDefaultEditor(Object.class, null);
         mempoolTable.setDefaultEditor(Object.class, null);
 
         // mempool 영역을 누를 때 마다 mempool 내용을 새로 받아오기 위해서
@@ -99,12 +94,11 @@ public class MidPanel extends JPanel {
     public void makeResultTablePanel() {
         resultTablePanel = new JPanel(new LinearLayout(Orientation.VERTICAL, 0));
 
-        String[] col = new String[5];
+        String[] col = new String[4];
         col[0] = "No";
         col[1] = "ID";
         col[2] = "Country Code";
         col[3] = "Zip Code";
-        col[4] = "Temporary";
 
         productTableModel = new DefaultTableModel(col, 0);
 
@@ -112,11 +106,6 @@ public class MidPanel extends JPanel {
         productTable.getTableHeader().setBackground(Color.WHITE);
         productTable.setRowHeight(30);
         productTable.getTableHeader().setFont(Settings.Font16);
-        productTable.getColumnModel().getColumn(0).setPreferredWidth(5);
-        productTable.getColumnModel().getColumn(1).setPreferredWidth(100);
-        productTable.getColumnModel().getColumn(2).setPreferredWidth(90);
-        productTable.getColumnModel().getColumn(3).setPreferredWidth(90);
-        productTable.getColumnModel().getColumn(4).setPreferredWidth(90);
         productTable.setFont(Settings.Font12);
         productTable.setRowSelectionAllowed(true);
         productTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -202,7 +191,7 @@ public class MidPanel extends JPanel {
 
     public void makeSendPanel() {
         sendPanel = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10));
-        sendPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); //상하좌우 20씩 띄우기 //!!!
+        sendPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         addressLabel = new JLabel("ADDRESS");
         addressLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         addressLabel.setFont(Settings.Font12);
@@ -322,7 +311,6 @@ public class MidPanel extends JPanel {
                     String.valueOf(map.get("PID")),
                     String.valueOf(map.get("countryCode")),
                     String.valueOf(map.get("zipCode")),
-                    ""
             };
             productTableModel.addRow(row);
         }
