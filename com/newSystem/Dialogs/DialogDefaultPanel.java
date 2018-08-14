@@ -256,8 +256,8 @@ public class DialogDefaultPanel extends JPanel {
 
                         for (Map map : result) {
                             rows[count][0] = String.valueOf(resultSize);
-                            rows[count][1] = String.valueOf(map.get("Time"));
-                            rows[count][2] = String.valueOf(map.get("ID"));
+                            rows[count][1] = String.valueOf(map.get("\"Time\""));
+                            rows[count][2] = String.valueOf(map.get("\"ID\""));
                             count++;
                             resultSize--;
                         }

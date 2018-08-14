@@ -9,7 +9,10 @@ import com.newSystem.Dialogs.AddressViewDialog;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -89,8 +92,20 @@ public class MidPanel extends JPanel {
             }
         };
         tabbedPane.addChangeListener(changeListener);
-    }
 
+        // product table colum width control.
+        setWidthAsPercentages(productTable, 10, 50, 20, 20);
+    }
+    private void setWidthAsPercentages(JTable table,
+                                               double... percentages) {
+        final double factor = 10000;
+
+        TableColumnModel model = table.getColumnModel();
+        for (int columnIndex = 0; columnIndex < percentages.length; columnIndex++) {
+            TableColumn column = model.getColumn(columnIndex);
+            column.setPreferredWidth((int) (percentages[columnIndex] * factor));
+        }
+    }
     public void makeResultTablePanel() {
         resultTablePanel = new JPanel(new LinearLayout(Orientation.VERTICAL, 0));
 
@@ -109,6 +124,13 @@ public class MidPanel extends JPanel {
         productTable.setFont(Settings.Font12);
         productTable.setRowSelectionAllowed(true);
         productTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+        // For product table center alignment.
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        for (int cnt = 0; cnt < productTableModel.getColumnCount(); cnt++) {
+            productTable.getColumnModel().getColumn(cnt).setCellRenderer(centerRenderer);
+        }
 
         JScrollPane list = new JScrollPane(productTable);
         list.getViewport().setBackground(Color.WHITE);
