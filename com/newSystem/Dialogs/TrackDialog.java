@@ -31,7 +31,7 @@ public class TrackDialog extends JDialog {
         upperPanel.makeNonEmptyLine("Product ID", null, true);
         upperPanel.makeTrackButtonLine();
 
-        String[] col = {"No", "Time of receipt", "Sender"};
+        String[] col = {"No", "Time", "Receiver"};
         trackTableModel = new DefaultTableModel(col, 0);
         trackTable = new JTable(trackTableModel);
         trackTable.getColumnModel().getColumn(0).setPreferredWidth(10);

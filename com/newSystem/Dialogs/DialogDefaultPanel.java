@@ -19,8 +19,8 @@ import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.ListIterator;
 
 public class DialogDefaultPanel extends JPanel {
@@ -221,9 +221,9 @@ public class DialogDefaultPanel extends JPanel {
                     int resultRow = -1;
                     for (int r = 0; r < productTable.getRowCount(); r++) {
                         if (productTableModel.getValueAt(r, 1).equals(id) &&
-                            productTableModel.getValueAt(r, 2).equals(cc) &&
-                            productTableModel.getValueAt(r, 3).equals(zc
-                            )) {
+                                productTableModel.getValueAt(r, 2).equals(cc) &&
+                                productTableModel.getValueAt(r, 3).equals(zc
+                                )) {
                             resultRow = r;
                             break;
                         }
@@ -249,19 +249,20 @@ public class DialogDefaultPanel extends JPanel {
                     JOptionPane.showMessageDialog(null, "Insert Product ID.", "Message", JOptionPane.WARNING_MESSAGE);
                 } else {
                     try {
-                        java.util.List<String> result = MainFrame.bitcoinJSONRPCClient.track_product(id);
-                        ListIterator<String> itr = result.listIterator(result.size()); // reverse order로 iterate 함.
-                        int cnt = 1;
-                        String[] firstRow = {String.valueOf(cnt++), "", "Producer"}; // [No, Time, Sender] 순으로 출력
-                        TrackDialog.getTrackTableModel().addRow(firstRow);
+                        List<Map> result = MainFrame.bitcoinJSONRPCClient.track_product(id);
+                        int resultSize = result.size();
+                        int count = 0;
+                        String[][] rows = new String[result.size()][3];
 
-                        while (itr.hasPrevious()) {
-                            long time = Long.parseLong(itr.previous()); // tx 시간을 입력 받음(1970.01.01 기준 몇 초 지났는지가 time에 저장됨)
-                            Date d = new Date(time * 1000); // 시간 형식으로 변환
-                            SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // 2018-08-06 10:19:33 과 같은 형식으로 지정
-                            String[] tmp = {String.valueOf(cnt++), timeFormat.format(d), itr.previous()};
-
-                            TrackDialog.getTrackTableModel().addRow(tmp);
+                        for (Map map : result) {
+                            rows[count][0] = String.valueOf(resultSize);
+                            rows[count][1] = String.valueOf(map.get("Time"));
+                            rows[count][2] = String.valueOf(map.get("ID"));
+                            count++;
+                            resultSize--;
+                        }
+                        for (int i = result.size() - 1; i >= 0; i--) {
+                            TrackDialog.getTrackTableModel().addRow(rows[i]);
                         }
                     } catch (ClassCastException err) {
                         JOptionPane.showMessageDialog(null, "There is no product " + id, "Message", JOptionPane.WARNING_MESSAGE);

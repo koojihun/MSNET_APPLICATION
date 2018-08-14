@@ -19,8 +19,8 @@ public class Bitcoind extends Thread {
             if (isBitcoindRunning())
                 killBitcoind();
             String filePath = "C:\\Users\\" +
-                               System.getProperty("user.name") +
-                               "\\AppData\\Roaming\\Bitcoin\\bincoind.exe";
+                    System.getProperty("user.name") +
+                    "\\AppData\\Roaming\\Bitcoin\\bincoind.exe";
             process_bincoind = Runtime.getRuntime().exec(filePath);
         } catch (IOException e) {
             System.err.println("Bitcoind Execute error");
@@ -34,6 +34,7 @@ public class Bitcoind extends Thread {
         BitcoindWriter writer = new BitcoindWriter(new BufferedReader(new InputStreamReader(process_bincoind.getInputStream())));
         writer.start();
     }
+
     public static boolean isBitcoindRunning() throws Exception {
         Process p = Runtime.getRuntime().exec("TASKLIST");
         BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -56,9 +57,11 @@ public class Bitcoind extends Thread {
     // BitcoinWriter class (= thread) will write bitcoind result into JTextArea in infinite loop.
     public class BitcoindWriter extends Thread {
         private BufferedReader bufferedReader;
+
         public BitcoindWriter(BufferedReader bufferedReader) {
             this.bufferedReader = bufferedReader;
         }
+
         @Override
         public void run() {
             String s;

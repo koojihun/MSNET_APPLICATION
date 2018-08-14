@@ -1611,7 +1611,7 @@ public interface BitcoindRpcClient {
 
   List<Map> list_received_by_address();
 
-  List<String> track_product(String pid);
+  List<Map> track_product(String pid);
 
   List<Map> enumerate_account_info();
 

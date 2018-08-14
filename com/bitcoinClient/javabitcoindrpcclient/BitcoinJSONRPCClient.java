@@ -2249,7 +2249,7 @@ public class BitcoinJSONRPCClient implements BitcoindRpcClient {
     }
 
     @Override
-    public List<String> track_product(String pid) {
-        return (List<String>) query("track_product", pid);
+    public List<Map> track_product(String pid) {
+        return (List<Map>) query("track_product", pid);
     }
 }
