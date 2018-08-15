@@ -38,10 +38,10 @@ class TopPanelButtons {
         buttons.add(addBtn = new JButton("ADD", new ImageIcon(classLoader.getResource("btn_plus.png"))));
         buttons.add(stockBtn = new JButton( "STOCK", new ImageIcon(classLoader.getResource("btn_stock.png"))));
         buttons.add(trackBtn = new JButton("TRACKING", new ImageIcon(classLoader.getResource("btn_track.png"))));
-        buttons.add(informationBtn = new JButton("INFO", new ImageIcon(classLoader.getResource("btn_info.png"))));
         buttons.add(miningBtn = new JButton("MINING", new ImageIcon(classLoader.getResource("btn_mining.png"))));
         buttons.add(importBtn = new JButton("IMPORT", new ImageIcon(classLoader.getResource("btn_import.png"))));
         buttons.add(addressBtn = new JButton("ADDRESS", new ImageIcon(classLoader.getResource("btn_address.png"))));
+        buttons.add(informationBtn = new JButton("INFO", new ImageIcon(classLoader.getResource("btn_info.png"))));
     }
     void addBtns() {
         LinearConstraints linearConstraints = new LinearConstraints().setLinearSpace(LinearSpace.MATCH_PARENT);

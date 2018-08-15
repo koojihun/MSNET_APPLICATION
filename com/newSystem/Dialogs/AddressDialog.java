@@ -24,7 +24,7 @@ public class AddressDialog extends JDialog {
     public AddressDialog() {
         setTitle("Address Book");
         JPanel mainPanel = new JPanel(new LinearLayout(Orientation.VERTICAL, 10));
-        setSize(550, 800);
+        setSize(600, 800);
         setLocation(200, 200);
         setIconImage(Settings.icon);
         add(mainPanel);

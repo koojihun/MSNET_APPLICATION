@@ -12,7 +12,7 @@ public class InfoDialog extends JDialog {
         setSize(500, 500);
         // Icon 설정
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("icon.png")));
-        DialogDefaultPanel panel = new DialogDefaultPanel(12, 10, DialogDefaultPanel.DIALOG.INFO);
+        DialogDefaultPanel panel = new DialogDefaultPanel(12, 20, DialogDefaultPanel.DIALOG.INFO);
         BitcoindRpcClient.Info info = MainFrame.bitcoinJSONRPCClient.getInfo();
         panel.makeNonEmptyLine("Version", String.valueOf(info.version()), false);
         panel.makeNonEmptyLine("Protocol Version", String.valueOf(info.protocolVersion()), false);

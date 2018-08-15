@@ -21,7 +21,7 @@ public class ImportDialog extends JDialog {
     public ImportDialog() {
         setTitle("Imported Addresses (Only For Server)");
         JPanel mainPanel = new JPanel(new LinearLayout(Orientation.VERTICAL, 10));
-        setSize(550, 800);
+        setSize(600, 800);
         setLocation(200, 200);
         // Icon 설정
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("icon.png")));

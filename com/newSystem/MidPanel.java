@@ -5,10 +5,13 @@ import com.mommoo.flat.layout.linear.Orientation;
 import com.mommoo.flat.layout.linear.constraints.LinearConstraints;
 import com.mommoo.flat.layout.linear.constraints.LinearSpace;
 import com.newSystem.Dialogs.AddressViewDialog;
+import javafx.scene.control.TableCell;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -93,14 +96,20 @@ public class MidPanel extends JPanel {
         col[2] = "Country Code";
         col[3] = "Zip Code";
 
-        productTableModel = new DefaultTableModel(col, 0);
-
+        productTableModel = new DefaultTableModel(col, 0) {
+            @Override
+            public boolean isCellEditable(int row, int col) {
+                return false;
+            }
+        };
         productTable = new JTable(productTableModel);
         productTable.setRowHeight(30);
         productTable.getTableHeader().setFont(Settings.Font19);
         productTable.setFont(Settings.Font14);
         productTable.setRowSelectionAllowed(true);
         productTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+
         setWidthAsPercentages(productTable, 10, 50, 20, 20);
         setColumnAlignment(productTable, JLabel.CENTER);
 
@@ -231,6 +240,7 @@ public class MidPanel extends JPanel {
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         /////////////////////////////////////////////////////////////////////
         JScrollPane bincoindScrollPane = new JScrollPane(bincoindTextArea);
+        bincoindTextArea.setBackground(Color.GRAY);
         bitcoindPanel.add(bincoindScrollPane, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
     }
 

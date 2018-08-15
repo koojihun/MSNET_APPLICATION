@@ -71,7 +71,7 @@ public class DialogDefaultPanel extends JPanel {
 
         targetLine.add(targetLabel, new LinearConstraints().setWeight(4).setLinearSpace(LinearSpace.WRAP_CENTER_CONTENT));
         targetLine.add(targetText, new LinearConstraints().setWeight(6).setLinearSpace(LinearSpace.WRAP_CENTER_CONTENT));
-        targetLine.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
+        targetLine.setBorder(BorderFactory.createEmptyBorder(padding + 10, padding, padding, padding));
         add(targetLine, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
     }
 
@@ -89,12 +89,13 @@ public class DialogDefaultPanel extends JPanel {
             cancelBtn.setFocusPainted(false);
             cancelBtn.addActionListener(clickListener);
         }
+
         add(targetLine, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
     }
 
     public void makeTrackButtonLine() {
-        JPanel targetLine = eachLine[lineCount++] = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10));
-        targetLine.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
+        JPanel targetLine = eachLine[lineCount++] = new JPanel(new LinearLayout(Orientation.HORIZONTAL));
+        targetLine.setBorder(BorderFactory.createEmptyBorder(0, padding, 0, padding));
         targetLine.add(trackBtn = new JButton("Track"), new LinearConstraints().setWeight(4).setLinearSpace(LinearSpace.WRAP_CENTER_CONTENT));
         trackBtn.setFont(Settings.Font14);
         trackBtn.setFocusPainted(false);

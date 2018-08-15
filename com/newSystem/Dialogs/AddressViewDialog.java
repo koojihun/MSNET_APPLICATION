@@ -32,7 +32,7 @@ public class AddressViewDialog extends JDialog {
         ids = products;
         many = isMany;
         JPanel mainPanel = new JPanel(new LinearLayout(Orientation.VERTICAL, 10));
-        setSize(550, 800);
+        setSize(600, 800);
         setLocation(200, 200);
         add(mainPanel);
         clickListener = new ClickListener();
