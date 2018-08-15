@@ -65,6 +65,7 @@ public class AddressViewDialog extends JDialog {
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         savedAddressTable.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
         savedAddressTable.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
+        savedAddressTable.setDefaultEditor(Object.class, new MyCellEditor());
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         JScrollPane scrollPane = new JScrollPane(savedAddressTable);
         scrollPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -100,4 +101,26 @@ public class AddressViewDialog extends JDialog {
             }
         }
     }
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // product table의 내용물을 edit해도 focus를 잃으면 원래 값으로 돌아가도록 하기 위한 CellEditor 조작.
+    private class MyCellEditor extends DefaultCellEditor {
+        private Object originalValue;
+        public MyCellEditor() {
+            super(new JTextField());
+        }
+        public Component getTableCellEditorComponent(JTable table, Object value,
+                                                     boolean isSelected,
+                                                     int row, int column) {
+            JTextField editor = (JTextField) super.getTableCellEditorComponent(table, value, isSelected,
+                    row, column);
+            originalValue = value;
+            return editor;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return originalValue;
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////
 }

@@ -4,6 +4,7 @@ import com.mommoo.flat.layout.linear.LinearLayout;
 import com.mommoo.flat.layout.linear.Orientation;
 import com.mommoo.flat.layout.linear.constraints.LinearConstraints;
 import com.mommoo.flat.layout.linear.constraints.LinearSpace;
+import com.newSystem.MidPanel;
 import com.newSystem.Settings;
 
 import javax.swing.*;
@@ -53,6 +54,7 @@ public class AddressDialog extends JDialog {
         savedAddressTable.setRowHeight(30);
         savedAddressTable.getTableHeader().setFont(Settings.Font19);
         savedAddressTable.setFont(Settings.Font14);
+        savedAddressTable.setDefaultEditor(Object.class, new MyCellEditor());
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -164,4 +166,26 @@ public class AddressDialog extends JDialog {
             setVisible(true);
         }
     }
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // product table의 내용물을 edit해도 focus를 잃으면 원래 값으로 돌아가도록 하기 위한 CellEditor 조작.
+    private class MyCellEditor extends DefaultCellEditor {
+        private Object originalValue;
+        public MyCellEditor() {
+            super(new JTextField());
+        }
+        public Component getTableCellEditorComponent(JTable table, Object value,
+                                                     boolean isSelected,
+                                                     int row, int column) {
+            JTextField editor = (JTextField) super.getTableCellEditorComponent(table, value, isSelected,
+                    row, column);
+            originalValue = value;
+            return editor;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return originalValue;
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////
 }

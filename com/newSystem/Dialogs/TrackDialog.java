@@ -38,6 +38,7 @@ public class TrackDialog extends JDialog {
         trackTable.getColumnModel().getColumn(0).setPreferredWidth(10);
         trackTable.getColumnModel().getColumn(1).setPreferredWidth(100);
         trackTable.getColumnModel().getColumn(2).setPreferredWidth(200);
+        trackTable.setDefaultEditor(Object.class, new MyCellEditor());
         underPanel = new JScrollPane(trackTable);
         mainPanel.add(upperPanel, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
         mainPanel.add(underPanel, new LinearConstraints().setWeight(5).setLinearSpace(LinearSpace.MATCH_PARENT));
@@ -48,4 +49,26 @@ public class TrackDialog extends JDialog {
     public static DefaultTableModel getTrackTableModel() {
         return trackTableModel;
     }
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // product table의 내용물을 edit해도 focus를 잃으면 원래 값으로 돌아가도록 하기 위한 CellEditor 조작.
+    private class MyCellEditor extends DefaultCellEditor {
+        private Object originalValue;
+        public MyCellEditor() {
+            super(new JTextField());
+        }
+        public Component getTableCellEditorComponent(JTable table, Object value,
+                                                     boolean isSelected,
+                                                     int row, int column) {
+            JTextField editor = (JTextField) super.getTableCellEditorComponent(table, value, isSelected,
+                    row, column);
+            originalValue = value;
+            return editor;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return originalValue;
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////
 }

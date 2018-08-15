@@ -31,6 +31,7 @@ public class MidPanel extends JPanel {
     private JPanel findPanel; // Result Page 맨 밑 find button 이 있을 공간
     private JPanel sendPanel; // Result Page 맨 밑 send button 이 있을 공간
     private ButtonListener buttonListener;
+    private MyCellEditor myCellEditor;
     ////////////////////////////
     static private DefaultTableModel productTableModel;
     static private JTable productTable;
@@ -55,6 +56,7 @@ public class MidPanel extends JPanel {
     public MidPanel() {
         setLayout(new LinearLayout(Orientation.VERTICAL));
         JTabbedPane tabbedPane = new JTabbedPane();
+        myCellEditor = new MyCellEditor();
 
         tabbedPane.setFont(Settings.Font14);
         add(tabbedPane, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
@@ -96,19 +98,14 @@ public class MidPanel extends JPanel {
         col[2] = "Country Code";
         col[3] = "Zip Code";
 
-        productTableModel = new DefaultTableModel(col, 0) {
-            @Override
-            public boolean isCellEditable(int row, int col) {
-                return false;
-            }
-        };
+        productTableModel = new DefaultTableModel(col, 0);
         productTable = new JTable(productTableModel);
         productTable.setRowHeight(30);
         productTable.getTableHeader().setFont(Settings.Font19);
         productTable.setFont(Settings.Font14);
         productTable.setRowSelectionAllowed(true);
         productTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
+        productTable.setDefaultEditor(Object.class, myCellEditor);
 
         setWidthAsPercentages(productTable, 10, 50, 20, 20);
         setColumnAlignment(productTable, JLabel.CENTER);
@@ -134,7 +131,7 @@ public class MidPanel extends JPanel {
         mempoolTable.setRowHeight(30);
         mempoolTable.getTableHeader().setFont(Settings.Font19);
         mempoolTable.setFont(Settings.Font14);
-
+        mempoolTable.setDefaultEditor(Object.class, myCellEditor);
 
         JScrollPane list = new JScrollPane(mempoolTable);
         list.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -147,11 +144,6 @@ public class MidPanel extends JPanel {
             }
         });
         mempoolPanel.add(list, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
-    }
-
-    // bitcoind가 get_current_products의 결과물을 뿌려주기 위해서 static으로 필요함.
-    public static DefaultTableModel getProductTableModel() {
-        return productTableModel;
     }
 
     public static DefaultTableModel getMempoolTableModel() {
@@ -328,6 +320,28 @@ public class MidPanel extends JPanel {
             }
         }
     }
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // product table의 내용물을 edit해도 focus를 잃으면 원래 값으로 돌아가도록 하기 위한 CellEditor 조작.
+    private class MyCellEditor extends DefaultCellEditor {
+        private Object originalValue;
+        public MyCellEditor() {
+            super(new JTextField());
+        }
+        public Component getTableCellEditorComponent(JTable table, Object value,
+                                                     boolean isSelected,
+                                                     int row, int column) {
+            JTextField editor = (JTextField) super.getTableCellEditorComponent(table, value, isSelected,
+                    row, column);
+            originalValue = value;
+            return editor;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return originalValue;
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////
 }
 
 
