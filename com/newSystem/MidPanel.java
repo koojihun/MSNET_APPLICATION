@@ -9,7 +9,10 @@ import com.newSystem.Dialogs.AddressViewDialog;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,13 +21,13 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 
 public class MidPanel extends JPanel {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     private JPanel resultTablePanel; // Result
     private JPanel findPanel; // Result Page 맨 밑 find button 이 있을 공간
     private JPanel sendPanel; // Result Page 맨 밑 send button 이 있을 공간
+    private ButtonListener buttonListener;
     ////////////////////////////
     static private DefaultTableModel productTableModel;
     static private JTable productTable;
@@ -45,14 +48,12 @@ public class MidPanel extends JPanel {
     private JPanel mempoolPanel; // mempool
     static private DefaultTableModel mempoolTableModel;
     static private JTable mempoolTable;
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public MidPanel() {
-        setBackground(Color.white);
         setLayout(new LinearLayout(Orientation.VERTICAL));
         JTabbedPane tabbedPane = new JTabbedPane();
 
-        tabbedPane.setFont(Settings.Font12);
+        tabbedPane.setFont(Settings.Font14);
         add(tabbedPane, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
 
         makeResultTablePanel();
@@ -62,14 +63,6 @@ public class MidPanel extends JPanel {
         tabbedPane.add("Result", resultTablePanel);
         tabbedPane.add("Bincoind", bitcoindPanel);
         tabbedPane.add("Mempool", mempoolPanel);
-
-        tabbedPane.setBackgroundAt(0, Color.WHITE);
-        tabbedPane.setBackgroundAt(1, Color.WHITE);
-        tabbedPane.setBackgroundAt(2, Color.WHITE);
-
-        // Make Uneditable.
-        //productTable.setDefaultEditor(Object.class, null);
-        mempoolTable.setDefaultEditor(Object.class, null);
 
         // mempool 영역을 누를 때 마다 mempool 내용을 새로 받아오기 위해서
         // mempool 탭에 리스너 등록.
@@ -103,18 +96,18 @@ public class MidPanel extends JPanel {
         productTableModel = new DefaultTableModel(col, 0);
 
         productTable = new JTable(productTableModel);
-        productTable.getTableHeader().setBackground(Color.WHITE);
         productTable.setRowHeight(30);
-        productTable.getTableHeader().setFont(Settings.Font16);
-        productTable.setFont(Settings.Font12);
+        productTable.getTableHeader().setFont(Settings.Font19);
+        productTable.setFont(Settings.Font14);
         productTable.setRowSelectionAllowed(true);
         productTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        setWidthAsPercentages(productTable, 10, 50, 20, 20);
+        setColumnAlignment(productTable, JLabel.CENTER);
 
         JScrollPane list = new JScrollPane(productTable);
-        list.getViewport().setBackground(Color.WHITE);
-        list.setBackground(Color.WHITE);
         list.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         ///////////////////////////////////////////////////////////////////////////////////////////////
+        buttonListener = new ButtonListener();
         makeFindPanel();
         makeSendPanel();
         ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -122,21 +115,19 @@ public class MidPanel extends JPanel {
         resultTablePanel.add(list, new LinearConstraints().setWeight(10).setLinearSpace(LinearSpace.MATCH_PARENT));
         resultTablePanel.add(sendPanel, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
     }
+
     public void makeMempoolPanel() {
         mempoolPanel = new JPanel(new LinearLayout(Orientation.VERTICAL));
 
         String[] col = {"Transactions In Mempool"}; // dummy header. this will not be shown.
         mempoolTableModel = new DefaultTableModel(col, 0);
         mempoolTable = new JTable(mempoolTableModel);
-        mempoolTable.getTableHeader().setBackground(Color.WHITE);
         mempoolTable.setRowHeight(30);
-        mempoolTable.getTableHeader().setFont(Settings.Font16);
-        mempoolTable.setFont(Settings.Font12);
+        mempoolTable.getTableHeader().setFont(Settings.Font19);
+        mempoolTable.setFont(Settings.Font14);
 
 
         JScrollPane list = new JScrollPane(mempoolTable);
-        list.getViewport().setBackground(Color.WHITE);
-        list.setBackground(Color.WHITE);
         list.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         mempoolTable.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -165,11 +156,10 @@ public class MidPanel extends JPanel {
 
     public void makeFindPanel() {
         findPanel = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10));
-        findPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); //상하좌우 20씩 띄우기 //!!!
-        findPanel.setBackground(new Color(200, 221, 242));
+        findPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
         find_product_label = new JLabel("ID");
         find_product_label.setHorizontalAlignment(SwingConstants.RIGHT);
-        find_product_label.setFont(Settings.Font12);
+        find_product_label.setFont(Settings.Font14);
         find_product_textfield = new JTextField(50);
         find_product_textfield.addKeyListener(new KeyAdapter() {
             @Override
@@ -180,9 +170,9 @@ public class MidPanel extends JPanel {
             }
         });
         find_product_button = new JButton("FIND");
-        find_product_button.setFont(Settings.Font12);
+        find_product_button.setFont(Settings.Font14);
         find_product_button.setFocusPainted(false);
-        find_product_button.addActionListener(new FindButtonListener());
+        find_product_button.addActionListener(buttonListener);
 
         findPanel.add(find_product_label, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.WRAP_CENTER_CONTENT));
         findPanel.add(find_product_textfield, new LinearConstraints().setWeight(7).setLinearSpace(LinearSpace.WRAP_CENTER_CONTENT));
@@ -191,14 +181,14 @@ public class MidPanel extends JPanel {
 
     public void makeSendPanel() {
         sendPanel = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10));
-        sendPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        sendPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
         addressLabel = new JLabel("ADDRESS");
         addressLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        addressLabel.setFont(Settings.Font12);
+        addressLabel.setFont(Settings.Font14);
         addressTextField = new JTextField(50);
         sendButton = new JButton("SEND");
-        sendButton.setFont(Settings.Font12);
-        sendButton.addActionListener(new SendButtonListener());
+        sendButton.setFont(Settings.Font14);
+        sendButton.addActionListener(buttonListener);
         sendButton.setFocusPainted(false);
 
         sendPanel.add(addressLabel, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.WRAP_CENTER_CONTENT));
@@ -221,72 +211,20 @@ public class MidPanel extends JPanel {
             }
         }
         if (resultRow == -1) {
-            JOptionPane.showMessageDialog(null, "There is no " + target_string, "Message", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "There is no " + target_string,
+                    "Message", JOptionPane.WARNING_MESSAGE);
             return;
         }
         productTable.setRowSelectionInterval(resultRow, resultRow);
         productTable.scrollRectToVisible(productTable.getCellRect(resultRow, productTable.getColumnCount(), true));
     }
 
-    private class FindButtonListener implements ActionListener {
-        public void actionPerformed(ActionEvent event) {
-            findProductInProductTable();
-        }
-    }
-
-    private class SendButtonListener implements ActionListener {
-        public void actionPerformed(ActionEvent event) {
-            int[] selectedRowsIndex = productTable.getSelectedRows();
-            // 선택된 row가 없음 --> 그냥 종료.
-            if (selectedRowsIndex.length == 0)
-                return;
-            // 주소 칸에 입력 x --> 주소록에서 address 선택.
-            if (addressTextField.getText().length() == 0) {
-                // 단일 전송.
-                if (selectedRowsIndex.length == 1) {
-                    String product = productTableModel.getValueAt(selectedRowsIndex[0], 1).toString();
-                    new AddressViewDialog(product, false);
-                // 다중 전송.
-                } else {
-                    String products = "";
-                    for (int i = 0; i < selectedRowsIndex.length - 1; i++)
-                        products = products + productTableModel.getValueAt(selectedRowsIndex[i], 1).toString() + "/";
-                    products = products + productTableModel.getValueAt(selectedRowsIndex[selectedRowsIndex.length - 1], 1).toString();
-                    new AddressViewDialog(products, true);
-                }
-            } else {
-                // 단일 전송.
-                if (selectedRowsIndex.length == 1) {
-                    String id = productTableModel.getValueAt(selectedRowsIndex[0], 1).toString();
-                    address = addressTextField.getText();
-                    // 새로 만들어진 send_to_address는 product ID만 있으면 됨.
-                    MainFrame.bitcoinJSONRPCClient.send_to_address(address, id);
-                // 다중 전송.
-                } else {
-                    String products = "";
-                    for (int i = 0; i < selectedRowsIndex.length - 1; i++) {
-                        products = products + productTableModel.getValueAt(selectedRowsIndex[i], 1).toString() + "/";
-                    }
-                    products = products + productTableModel.getValueAt(selectedRowsIndex[selectedRowsIndex.length - 1], 1).toString();
-                    address = addressTextField.getText();
-                    MainFrame.bitcoinJSONRPCClient.send_many(address, products);
-                }
-                // 보낸 상품 table에서 지우기 위해 get_current_products()
-                getCurrentProducts();
-                // 정상적으로 보내졌으면 address textField가 빈칸으로 변해야함.
-                addressTextField.setText("");
-            }
-        }
-    }
-
     public void makeBitcoindPanel() {
         bitcoindPanel = new JPanel();
         bitcoindPanel.setLayout(new LinearLayout(Orientation.VERTICAL));
         bincoindTextArea = new JTextArea();
-        bincoindTextArea.setBackground(Color.BLACK);
-        bincoindTextArea.setForeground(Color.green);
         bincoindTextArea.setEditable(false);
-        bincoindTextArea.setFont(Settings.Font12);
+        bincoindTextArea.setFont(Settings.Font14);
         /////////////////////////////////////////////////////////////////////
         // AUTO SCROLL
         DefaultCaret caret = (DefaultCaret) bincoindTextArea.getCaret();
@@ -313,6 +251,71 @@ public class MidPanel extends JPanel {
                     String.valueOf(map.get("zipCode")),
             };
             productTableModel.addRow(row);
+        }
+    }
+
+    private void setWidthAsPercentages(JTable table,
+                                       double... percentages) {
+        TableColumnModel model = productTable.getColumnModel();
+        for (int columnIndex = 0; columnIndex < percentages.length; columnIndex++) {
+            TableColumn column = model.getColumn(columnIndex);
+            column.setPreferredWidth((int) (percentages[columnIndex] * 10000));
+        }
+    }
+    private void setColumnAlignment(JTable table, int Alignment) {
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(Alignment);
+        for (int cnt = 0; cnt < table.getColumnCount(); cnt++)
+            table.getColumnModel().getColumn(cnt).setCellRenderer(centerRenderer);
+    }
+
+    private class ButtonListener implements ActionListener {
+        public void actionPerformed(ActionEvent event) {
+            JButton clicked = (JButton) event.getSource();
+            if (clicked.getText().equals("FIND")) {
+                findProductInProductTable();
+            } else if (clicked.getText().equals("SEND")) {
+                int[] selectedRowsIndex = productTable.getSelectedRows();
+                // 선택된 row가 없음 --> 그냥 종료.
+                if (selectedRowsIndex.length == 0)
+                    return;
+                // 주소 칸에 입력 x --> 주소록에서 address 선택.
+                if (addressTextField.getText().length() == 0) {
+                    // 단일 전송.
+                    if (selectedRowsIndex.length == 1) {
+                        String product = productTableModel.getValueAt(selectedRowsIndex[0], 1).toString();
+                        new AddressViewDialog(product, false);
+                        // 다중 전송.
+                    } else {
+                        String products = "";
+                        for (int i = 0; i < selectedRowsIndex.length - 1; i++)
+                            products = products + productTableModel.getValueAt(selectedRowsIndex[i], 1).toString() + "/";
+                        products = products + productTableModel.getValueAt(selectedRowsIndex[selectedRowsIndex.length - 1], 1).toString();
+                        new AddressViewDialog(products, true);
+                    }
+                } else {
+                    // 단일 전송.
+                    if (selectedRowsIndex.length == 1) {
+                        String id = productTableModel.getValueAt(selectedRowsIndex[0], 1).toString();
+                        address = addressTextField.getText();
+                        // 새로 만들어진 send_to_address는 product ID만 있으면 됨.
+                        MainFrame.bitcoinJSONRPCClient.send_to_address(address, id);
+                        // 다중 전송.
+                    } else {
+                        String products = "";
+                        for (int i = 0; i < selectedRowsIndex.length - 1; i++) {
+                            products = products + productTableModel.getValueAt(selectedRowsIndex[i], 1).toString() + "/";
+                        }
+                        products = products + productTableModel.getValueAt(selectedRowsIndex[selectedRowsIndex.length - 1], 1).toString();
+                        address = addressTextField.getText();
+                        MainFrame.bitcoinJSONRPCClient.send_many(address, products);
+                    }
+                    // 보낸 상품 table에서 지우기 위해 get_current_products()
+                    getCurrentProducts();
+                    // 정상적으로 보내졌으면 address textField가 빈칸으로 변해야함.
+                    addressTextField.setText("");
+                }
+            }
         }
     }
 }

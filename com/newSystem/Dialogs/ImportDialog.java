@@ -29,7 +29,7 @@ public class ImportDialog extends JDialog {
 
         importAddressBtn = new JButton("Import Address");
         mainPanel.add(importAddressBtn, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
-        importAddressBtn.setFont(Settings.Font12);
+        importAddressBtn.setFont(Settings.Font14);
         importAddressBtn.setFocusPainted(false);
         importAddressBtn.addActionListener(new ClickListener());
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,8 +38,8 @@ public class ImportDialog extends JDialog {
         JTable importedAddressTable = new JTable(importedAddressTableModel);
         importedAddressTable.getTableHeader().setBackground(Color.WHITE);
         importedAddressTable.setRowHeight(30);
-        importedAddressTable.getTableHeader().setFont(Settings.Font16);
-        importedAddressTable.setFont(Settings.Font12);
+        importedAddressTable.getTableHeader().setFont(Settings.Font19);
+        importedAddressTable.setFont(Settings.Font14);
         java.util.List<Map> maps = MainFrame.bitcoinJSONRPCClient.enumerate_account_info(); {
             for (Map map : maps) {
                 String account = (String) map.get("account");
@@ -92,7 +92,7 @@ public class ImportDialog extends JDialog {
             explaination.setVerticalAlignment(SwingConstants.CENTER);
             explaination.setHorizontalAlignment(SwingConstants.CENTER);
             explaination.setBackground(Color.WHITE);
-            explaination.setFont(Settings.Font12);
+            explaination.setFont(Settings.Font14);
             mainPanel.add(explaination, new LinearConstraints().setWeight(2).setLinearSpace(LinearSpace.MATCH_PARENT));
             mainPanel.makeNonEmptyLine("Account", "", true);
             mainPanel.makeNonEmptyLine("Address", "", true);

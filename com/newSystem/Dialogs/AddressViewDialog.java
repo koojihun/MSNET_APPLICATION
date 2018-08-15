@@ -21,11 +21,13 @@ public class AddressViewDialog extends JDialog {
     private JTable savedAddressTable;
     private JButton okBtn;
     private JButton cancelBtn;
+    private ClickListener clickListener;
     String ids;
     boolean many;
+
     public AddressViewDialog(String products, boolean isMany) {
         // Icon 설정
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("icon.png")));
+        setIconImage(Settings.icon);
         setTitle("Select Address to send");
         ids = products;
         many = isMany;
@@ -33,14 +35,31 @@ public class AddressViewDialog extends JDialog {
         setSize(550, 800);
         setLocation(200, 200);
         add(mainPanel);
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        clickListener = new ClickListener();
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        // 상단 버튼 패널 생성.
+        JPanel btnPanel = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10));
+        btnPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 0, 20));
+        okBtn = new JButton("SEND");
+        okBtn.setFont(Settings.Font18);
+        okBtn.setFocusPainted(false);
+        okBtn.addActionListener(clickListener);
+        cancelBtn = new JButton("CANCEL");
+        cancelBtn.setFont(Settings.Font18);
+        cancelBtn.setFocusPainted(false);
+        cancelBtn.addActionListener(clickListener);
+        btnPanel.add(okBtn, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
+        btnPanel.add(cancelBtn, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+        // 상단 버튼 패널 등록.
+        mainPanel.add(btnPanel, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
         String[] col = {"Name", "Address"};
         savedAddressTableModel = new DefaultTableModel(col, 0);
         savedAddressTable = new JTable(savedAddressTableModel);
-        savedAddressTable.getTableHeader().setBackground(Color.WHITE);
         savedAddressTable.setRowHeight(30);
-        savedAddressTable.getTableHeader().setFont(Settings.Font16);
-        savedAddressTable.setFont(Settings.Font12);
+        savedAddressTable.getTableHeader().setFont(Settings.Font19);
+        savedAddressTable.setFont(Settings.Font14);
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -48,9 +67,9 @@ public class AddressViewDialog extends JDialog {
         savedAddressTable.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         JScrollPane scrollPane = new JScrollPane(savedAddressTable);
-        scrollPane.getViewport().setBackground(Color.WHITE);
-        scrollPane.setBackground(Color.WHITE);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        mainPanel.add(scrollPane, new LinearConstraints().setWeight(15).setLinearSpace(LinearSpace.MATCH_PARENT));
+
         if(AddressDialog.isThereAddressTxt()) {
             ArrayList<String> names_addresses = AddressDialog.readNameAndAddressFromFile();
             for (int cnt = 0; cnt < names_addresses.size(); cnt += 2) {
@@ -58,18 +77,6 @@ public class AddressViewDialog extends JDialog {
                 savedAddressTableModel.addRow(row);
             }
         }
-        mainPanel.add(scrollPane, new LinearConstraints().setWeight(15).setLinearSpace(LinearSpace.MATCH_PARENT));
-        JPanel targetLine = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10));
-        targetLine.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); //상하좌우 10씩 띄우기 //!!!
-        targetLine.add(okBtn = new JButton("OK"), new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
-        okBtn.setFont(Settings.Font12);
-        okBtn.setFocusPainted(false);
-        okBtn.addActionListener(new ClickListener());
-        targetLine.add(cancelBtn = new JButton("CANCEL"), new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
-        cancelBtn.setFont(Settings.Font12);
-        cancelBtn.setFocusPainted(false);
-        cancelBtn.addActionListener(new ClickListener());
-        mainPanel.add(targetLine, new LinearConstraints().setWeight(2).setLinearSpace(LinearSpace.MATCH_PARENT));
         setVisible(true);
     }
     private class ClickListener implements ActionListener {

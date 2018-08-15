@@ -11,8 +11,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.Vector;
 
 class TopPanelButtons {
@@ -25,13 +23,11 @@ class TopPanelButtons {
     private JButton importBtn;          //  import된 address 표시 (importaddress)
     private JButton addressBtn;         //  저장한 address를 표시
     private Vector<JButton> buttons;
-    private MouseTracker mouseTracker;
     private ClickListener clickListener;
-    public JPanel parent_panel;
+    public JPanel topPanel;
 
     TopPanelButtons(JPanel parent) {
-        parent_panel = parent;
-        mouseTracker = new MouseTracker();
+        topPanel = parent;
         clickListener = new ClickListener();
         buttons = new Vector<JButton>();
 
@@ -41,7 +37,6 @@ class TopPanelButtons {
         ClassLoader classLoader = getClass().getClassLoader();
         buttons.add(addBtn = new JButton("ADD", new ImageIcon(classLoader.getResource("btn_plus.png"))));
         buttons.add(stockBtn = new JButton( "STOCK", new ImageIcon(classLoader.getResource("btn_stock.png"))));
-        buttons.add(searchBtn = new JButton("FIND", new ImageIcon(classLoader.getResource("btn_search.png"))));
         buttons.add(trackBtn = new JButton("TRACKING", new ImageIcon(classLoader.getResource("btn_track.png"))));
         buttons.add(informationBtn = new JButton("INFO", new ImageIcon(classLoader.getResource("btn_info.png"))));
         buttons.add(miningBtn = new JButton("MINING", new ImageIcon(classLoader.getResource("btn_mining.png"))));
@@ -52,19 +47,17 @@ class TopPanelButtons {
         LinearConstraints linearConstraints = new LinearConstraints().setLinearSpace(LinearSpace.MATCH_PARENT);
         for (int cnt = 0; cnt < buttons.size(); cnt++) {
             JButton tmp = buttons.get(cnt);
-            parent_panel.add(tmp, linearConstraints);
-            tmp.addMouseListener(mouseTracker);
+            topPanel.add(tmp, linearConstraints);
             tmp.addActionListener(clickListener);
         }
         setAllBtnsBorder(false);
         setAllBtnsSize(70, 80);
         setAllBtnsFocusPainted(false);
-        setAllBtnsWhite();
         setAllBtnsFont();
     }
     void setAllBtnsFont() {
         for (int cnt = 0; cnt < buttons.size(); cnt++) {
-            buttons.get(cnt).setFont(Settings.Font12);
+            buttons.get(cnt).setFont(Settings.Font14);
             buttons.get(cnt).setIconTextGap(6);
             buttons.get(cnt).setVerticalTextPosition(SwingConstants.BOTTOM);
             buttons.get(cnt).setHorizontalTextPosition(SwingConstants.CENTER);
@@ -93,10 +86,7 @@ class TopPanelButtons {
                 buttons.get(cnt).setFocusPainted(false);
         }
     }
-    void setAllBtnsWhite() {
-        for (int cnt = 0; cnt < buttons.size(); cnt++)
-            buttons.get(cnt).setBackground(Color.WHITE);;
-    }
+
     ///////////////////////////////////////////////////////////////////////
     class ClickListener implements ActionListener {
         ClickListener() {}
@@ -111,33 +101,12 @@ class TopPanelButtons {
                 new InfoDialog();
             else if (clicked == miningBtn)
                 new MiningDialog();
-            else  if (clicked == searchBtn)
-                new FindDialog();
             else if (clicked == trackBtn)
                 new TrackDialog();
             else if (clicked == importBtn)
                 new ImportDialog();
             else if (clicked == addressBtn)
                 new AddressDialog();
-        }
-    }
-    ///////////////////////////////////////////////////////////////////////
-    class MouseTracker implements MouseListener {
-        @Override
-        public void mouseClicked(MouseEvent e) { }
-        @Override
-        public void mousePressed(MouseEvent e) { }
-        @Override
-        public void mouseReleased(MouseEvent e) { }
-        @Override//마우스가 버튼 안으로 들어오면 파란색으로 바뀜
-        public void mouseEntered(MouseEvent e) {
-            JButton b = (JButton)e.getSource();
-            b.setBackground(new Color(210, 233, 253));
-        }
-        @Override//마우스가 버튼 밖으로 나가면 흰색으로 바뀜
-        public void mouseExited(MouseEvent e) {
-            JButton b = (JButton)e.getSource();
-            b.setBackground(Color.WHITE);
         }
     }
 }
