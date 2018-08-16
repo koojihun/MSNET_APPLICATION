@@ -196,28 +196,28 @@ public class DialogDefaultPanel extends JPanel {
                     String companyName = eachText[1].getText();
                     if (companyName.length() == 0) {
                         JOptionPane.showMessageDialog(null, "Insert name of Company.", "Message", JOptionPane.WARNING_MESSAGE);
-                            } else {
-                                //String url = "http://166.104.126.21:9999/?method=0&account=" + companyName + "&address=" + MainFrame.bitcoinJSONRPCClient.get_account_address("");
-                                String url = "http://166.104.126.21:9999/?method=0&account=" + companyName + "&address=" + MainFrame.bitcoinJSONRPCClient.get_account_address("");
-                                    try {
-                                        URL obj = new URL(url);
-                                        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-                                        con.setRequestMethod("GET");
-                                        //add request header 헤더를 만들어주는것.
-                                        con.setRequestProperty("User-Agent", "Chrome/version");
-                                        con.setRequestProperty("Accept-Charset", "UTF-8");
-                                        con.setRequestProperty("Content-Type", "text/plain; charset=utf-8");
-                                        int responseCode = con.getResponseCode();
-                                        System.out.println("\nSending 'GET' request to URL : " + url);
-                                        System.out.println("Response Code : " + responseCode);
 
-                                        BufferedReader in = new BufferedReader(
-                                                new InputStreamReader(con.getInputStream()));
-                                        String inputLine;
-                                    StringBuffer response = new StringBuffer();
+                    } else {
+                        //String url = "http://166.104.126.21:9999/?method=0&account=" + companyName + "&address=" + MainFrame.bitcoinJSONRPCClient.get_account_address("");
+                        String url = "http://166.104.126.21:9999/?method=0&account=" + companyName + "&address=" + MainFrame.bitcoinJSONRPCClient.get_account_address("");
+                        try {
+                            URL obj = new URL(url);
+                            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+                            con.setRequestMethod("GET");
+                            //add request header 헤더를 만들어주는것.
+                            con.setRequestProperty("User-Agent", "Chrome/version");
+                            con.setRequestProperty("Accept-Charset", "UTF-8");
+                            con.setRequestProperty("Content-Type", "text/plain; charset=utf-8");
+                            int responseCode = con.getResponseCode();
+                            System.out.println("\nSending 'GET' request to URL : " + url);
+                            System.out.println("Response Code : " + responseCode);
+                            BufferedReader in = new BufferedReader(
+                                    new InputStreamReader(con.getInputStream()));
+                            String inputLine;
+                            StringBuffer response = new StringBuffer();
 
-                                    while ((inputLine = in.readLine()) != null) {
-                                        response.append(inputLine);
+                            while ((inputLine = in.readLine()) != null) {
+                                response.append(inputLine);
                             }
                             in.close();
 
