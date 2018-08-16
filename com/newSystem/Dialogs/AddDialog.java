@@ -15,6 +15,8 @@ public class AddDialog extends JDialog {
     private DialogDefaultPanel productManyPanel;
     private DialogDefaultPanel addressPanel;
     private DialogDefaultPanel peerPanel;
+    private DialogDefaultPanel sendAddressToServerPanel; // 생산자의 서버로 address를 보내줌
+
 
     public AddDialog() {
         setTitle("Make a new product OR Add a new Address");
@@ -58,16 +60,24 @@ public class AddDialog extends JDialog {
         peerPanel.makeEmptyLine();
         peerPanel.makeButtonLine();
 
+        sendAddressToServerPanel = new DialogDefaultPanel(4, 20, DialogDefaultPanel.DIALOG.SENDADDRESSTOSERVER);
+        sendAddressToServerPanel.makeEmptyLine();
+        sendAddressToServerPanel.makeNonEmptyLine("Company name", null, true);
+        sendAddressToServerPanel.makeEmptyLine();
+        sendAddressToServerPanel.makeButtonLine();
+
         tabbedPane.addTab("product", productPanel);
         tabbedPane.addTab("Many product", productManyPanel);
         tabbedPane.addTab("address", addressPanel);
         tabbedPane.addTab("peer", peerPanel);
+        tabbedPane.addTab("send address", sendAddressToServerPanel);
 
         tabbedPane.setFont(Settings.Font12);
         tabbedPane.setBackgroundAt(0, Color.WHITE);
         tabbedPane.setBackgroundAt(1, Color.WHITE);
         tabbedPane.setBackgroundAt(2, Color.WHITE);
         tabbedPane.setBackgroundAt(3, Color.WHITE);
+        tabbedPane.setBackgroundAt(4, Color.WHITE);
 
         setVisible(true);
     }
