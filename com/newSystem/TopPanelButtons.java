@@ -18,6 +18,7 @@ class TopPanelButtons {
     private JButton stockBtn;           //  재고 표시
     private JButton searchBtn;          //  검색
     private JButton trackBtn;           //  삼품 유통 경로 추적 (track_product)
+    private JButton trackLocationBtn;        //  모든 상품의 위치 추적
     private JButton informationBtn;     //  정보 표시 (getinfo, getpeerinfo)
     private JButton miningBtn;          //  블록 마이닝 (set_generate, auto_set_generate)
     private JButton importBtn;          //  import된 address 표시 (importaddress)
@@ -38,6 +39,7 @@ class TopPanelButtons {
         buttons.add(addBtn = new JButton("ADD", new ImageIcon(classLoader.getResource("btn_plus.png"))));
         buttons.add(stockBtn = new JButton( "STOCK", new ImageIcon(classLoader.getResource("btn_stock.png"))));
         buttons.add(trackBtn = new JButton("TRACKING", new ImageIcon(classLoader.getResource("btn_track.png"))));
+        buttons.add(trackLocationBtn = new JButton("Location", new ImageIcon(classLoader.getResource("btn_location.png"))));
         buttons.add(miningBtn = new JButton("MINING", new ImageIcon(classLoader.getResource("btn_mining.png"))));
         buttons.add(importBtn = new JButton("IMPORT", new ImageIcon(classLoader.getResource("btn_import.png"))));
         buttons.add(addressBtn = new JButton("ADDRESS", new ImageIcon(classLoader.getResource("btn_address.png"))));
@@ -76,6 +78,7 @@ class TopPanelButtons {
         // tracking 버튼과 mining 버튼, address 버튼은 정해진 size로 만들 경우, 텍스트가 잘림
         // 그래서 사이즈 조정.
         trackBtn.setPreferredSize(new Dimension(92, 80));
+        trackLocationBtn.setPreferredSize(new Dimension(92, 80));
         miningBtn.setPreferredSize(new Dimension(80, 80));
         importBtn.setPreferredSize(new Dimension(85, 80));
         addressBtn.setPreferredSize(new Dimension(85, 80));
@@ -103,6 +106,8 @@ class TopPanelButtons {
                 new MiningDialog();
             else if (clicked == trackBtn)
                 new TrackDialog();
+            else if (clicked == trackLocationBtn)
+                new TrackLocationDialog();
             else if (clicked == importBtn)
                 new ImportDialog();
             else if (clicked == addressBtn)

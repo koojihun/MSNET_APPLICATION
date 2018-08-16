@@ -1581,7 +1581,7 @@ public interface BitcoindRpcClient {
    * @param zipCode - product zip code
    * Must be called before set_generate
    */
-  void gen_new_product(String countryCode, String zipCode);
+  String gen_new_product(String countryCode, String zipCode);
   boolean find_product(String id, long countryCode, long zipCode);
   /**
    * For MSNet - Added by Juhan

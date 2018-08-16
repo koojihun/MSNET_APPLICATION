@@ -19,13 +19,17 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.net.URL;
 
+import static com.newSystem.MainFrame.bitcoinJSONRPCClient;
+
 public class DialogDefaultPanel extends JPanel {
     public enum DIALOG {
-        ADDPRODUCT, ADDMANYPRODUCT, ADDADDRESS, ADDPEER, INFO, MINING, FIND, TRACK, IMPORTADDRESS, TXINFO, SAVEADDRESS, SENDADDRESSTOSERVER
+        ADDPRODUCT, ADDMANYPRODUCT, ADDADDRESS, ADDPEER, INFO, MINING, FIND, TRACK, IMPORTADDRESS, TXINFO, SAVEADDRESS, SENDADDRESSTOSERVER, TRACKLOCATION
     }
 
     public JPanel[] eachLine; // if total = 4 Lines, 4th line will contain ok & cancel buttons.
@@ -120,7 +124,7 @@ public class DialogDefaultPanel extends JPanel {
                 if (dialog == DIALOG.ADDADDRESS) {
                     // add 창에서 address 추가인 경우 첫번째라인은 비어 있음.
                     String account = eachText[1].getText();
-                    MainFrame.bitcoinJSONRPCClient.get_new_address(account);
+                    bitcoinJSONRPCClient.get_new_address(account);
                     SwingUtilities.getWindowAncestor(clicked).dispose();
                 } else if (dialog == DIALOG.ADDPRODUCT) {
                     // add 창에서 product 추가인 경우.
@@ -137,8 +141,15 @@ public class DialogDefaultPanel extends JPanel {
                                 "Too long Country Code & Zip Code.",
                                 "Message", JOptionPane.WARNING_MESSAGE);
                     } else {
-                        for (int cnt = 0; cnt < Integer.valueOf(count); cnt++) {
-                            MainFrame.bitcoinJSONRPCClient.gen_new_product(cc, zc);
+                        try {
+                            FileWriter fw = new FileWriter("C:\\Users\\" + Settings.getUserNmae() + "\\AppData\\Roaming\\Bitcoin\\products.txt");
+                            for (int cnt = 0; cnt < Integer.valueOf(count); cnt++) {
+                                String tmpPID = bitcoinJSONRPCClient.gen_new_product(cc, zc);
+                                fw.write(tmpPID + "\r\n");
+                            }
+                            fw.close();
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
                         }
                         SwingUtilities.getWindowAncestor(clicked).dispose();
                     }
@@ -149,7 +160,7 @@ public class DialogDefaultPanel extends JPanel {
                     if (account.equals("") || address.equals("")) {
                         JOptionPane.showMessageDialog(null, "Insert Account and Address.", "Message", JOptionPane.WARNING_MESSAGE);
                     } else {
-                        MainFrame.bitcoinJSONRPCClient.importAddress(address, account, true);
+                        bitcoinJSONRPCClient.importAddress(address, account, true);
                         SwingUtilities.getWindowAncestor(clicked).dispose();
                         new ImportDialog();
                     }
@@ -198,8 +209,7 @@ public class DialogDefaultPanel extends JPanel {
                         JOptionPane.showMessageDialog(null, "Insert name of Company.", "Message", JOptionPane.WARNING_MESSAGE);
 
                     } else {
-                        //String url = "http://166.104.126.21:9999/?method=0&account=" + companyName + "&address=" + MainFrame.bitcoinJSONRPCClient.get_account_address("");
-                        String url = "http://166.104.126.21:9999/?method=0&account=" + companyName + "&address=" + MainFrame.bitcoinJSONRPCClient.get_account_address("");
+                        String url = "http://166.104.126.21:9999/?method=0&account=" + companyName + "&address=" + bitcoinJSONRPCClient.get_account_address("");
                         try {
                             URL obj = new URL(url);
                             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -209,8 +219,6 @@ public class DialogDefaultPanel extends JPanel {
                             con.setRequestProperty("Accept-Charset", "UTF-8");
                             con.setRequestProperty("Content-Type", "text/plain; charset=utf-8");
                             int responseCode = con.getResponseCode();
-                            System.out.println("\nSending 'GET' request to URL : " + url);
-                            System.out.println("Response Code : " + responseCode);
                             BufferedReader in = new BufferedReader(
                                     new InputStreamReader(con.getInputStream()));
                             String inputLine;
@@ -220,12 +228,49 @@ public class DialogDefaultPanel extends JPanel {
                                 response.append(inputLine);
                             }
                             in.close();
-
-                            //print result
-                            System.out.println(response.toString());
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         }
+                    }
+                } else if (dialog == DIALOG.TRACKLOCATION) {
+                    HashMap<String, Integer> map = new HashMap<String, Integer>();
+                    String filename = eachText[0].getText();
+
+                    try {
+
+                        BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\" + Settings.getUserNmae() + "\\AppData\\Roaming\\Bitcoin\\" + filename));
+                        while (true) {
+                            String pID = br.readLine();
+                            if (pID == null) {
+                                break;
+                            } else {
+                                List<Map> track_prouct_Result = MainFrame.bitcoinJSONRPCClient.track_product(pID);
+                                if (track_prouct_Result.size() != 0) {
+                                    String userID = track_prouct_Result.get(0).get("\"ID\"").toString();
+                                    if (map.containsKey(userID)) {
+                                        map.put(userID, map.get(userID) + 1);
+                                    } else {
+                                        map.put(track_prouct_Result.get(0).get("\"ID\"").toString(), 1);
+                                    }
+                                }
+                            }
+                        }
+                       br.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    TrackLocationDialog.getTrackLocationTableModel().setNumRows(0);
+                    Iterator<String> itr = map.keySet().iterator();
+                    String[] row = new String[3];
+                    int count = 0;
+                    while(itr.hasNext()){
+                        String key = (String)itr.next();
+                        int value = map.get(key);
+                        count++;
+                        row[0] = String.valueOf(count);
+                        row[1] = key;
+                        row[2] = String.valueOf(value);
+                        TrackLocationDialog.getTrackLocationTableModel().addRow(row);
                     }
                 }
             } else if (clicked == trackBtn) {
@@ -240,7 +285,7 @@ public class DialogDefaultPanel extends JPanel {
                     JOptionPane.showMessageDialog(null, "Insert Product ID.", "Message", JOptionPane.WARNING_MESSAGE);
                 } else {
                     try {
-                        List<Map> result = MainFrame.bitcoinJSONRPCClient.track_product(id);
+                        List<Map> result = bitcoinJSONRPCClient.track_product(id);
                         int resultSize = result.size();
                         int count = 0;
                         String[][] rows = new String[result.size()][3];
@@ -249,6 +294,7 @@ public class DialogDefaultPanel extends JPanel {
                             rows[count][0] = String.valueOf(resultSize);
                             rows[count][1] = String.valueOf(map.get("\"Time\""));
                             rows[count][2] = String.valueOf(map.get("\"ID\""));
+
                             count++;
                             resultSize--;
                         }

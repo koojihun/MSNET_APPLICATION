@@ -2163,13 +2163,13 @@ public class BitcoinJSONRPCClient implements BitcoindRpcClient {
     }
 
     @Override
-    public void gen_new_product(String countryCode, String zipCode) {
+    public String gen_new_product(String countryCode, String zipCode) {
 
         StringBuffer sb = new StringBuffer();
         sb.append("{\"countryCode\":" + countryCode);
         sb.append(",\"zipCode\":" + zipCode + "}");
         String str = sb.toString();
-        query("gen_new_product", CrippledJavaScriptParser.parseJSExpr(str));
+        return (String) query("gen_new_product", CrippledJavaScriptParser.parseJSExpr(str));
     }
 
     @Override
