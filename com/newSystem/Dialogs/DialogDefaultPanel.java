@@ -142,7 +142,7 @@ public class DialogDefaultPanel extends JPanel {
                                 "Message", JOptionPane.WARNING_MESSAGE);
                     } else {
                         try {
-                            FileWriter fw = new FileWriter("C:\\Users\\" + Settings.getUserNmae() + "\\AppData\\Roaming\\Bitcoin\\products.txt");
+                            FileWriter fw = new FileWriter("C:\\Users\\" + Settings.getUserNmae() + "\\AppData\\Roaming\\Bitcoin\\ProductList.txt", true);
                             for (int cnt = 0; cnt < Integer.valueOf(count); cnt++) {
                                 String tmpPID = bitcoinJSONRPCClient.gen_new_product(cc, zc);
                                 fw.write(tmpPID + "\r\n");
