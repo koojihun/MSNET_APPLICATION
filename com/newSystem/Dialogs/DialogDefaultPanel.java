@@ -28,7 +28,7 @@ public class DialogDefaultPanel extends JPanel {
         ADDPRODUCT, ADDMANYPRODUCT, ADDADDRESS, ADDPEER, INFO, MINING, FIND, TRACK, IMPORTADDRESS, TXINFO, SAVEADDRESS, SENDADDRESSTOSERVER
     }
 
-    public JPanel[] eachLine; // total = 4 Lines, 4th line will contain ok & cancel buttons.
+    public JPanel[] eachLine; // if total = 4 Lines, 4th line will contain ok & cancel buttons.
     public JLabel[] eachLabel;
     public JTextField[] eachText;
     JButton okBtn;
@@ -38,6 +38,7 @@ public class DialogDefaultPanel extends JPanel {
     int lineCount;
     int padding;
     DIALOG dialog;
+    ClickListener clickListener;
 
     DialogDefaultPanel(int max, int padding, DIALOG dialog) {
         lineCount = 0;
@@ -47,13 +48,13 @@ public class DialogDefaultPanel extends JPanel {
         eachText = new JTextField[max];
         this.dialog = dialog;
         setLayout(new LinearLayout(Orientation.VERTICAL, 10));
-        setBackground(Color.WHITE);
+        clickListener = new ClickListener();
     }
 
     public void makeEmptyLine() {
         JPanel targetLine = eachLine[lineCount++] = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10));
-        targetLine.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding)); //상하좌우 10씩 띄우기
-        add(targetLine, new LinearConstraints().setWeight(2).setLinearSpace(LinearSpace.MATCH_PARENT));
+        targetLine.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
+        add(targetLine, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
     }
 
     public void makeNonEmptyLine(String l, String t, boolean textFieldChange) {
@@ -62,61 +63,45 @@ public class DialogDefaultPanel extends JPanel {
         JTextField targetText = eachText[lineCount++] = new JTextField();
         targetLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         targetLabel.setVerticalAlignment(SwingConstants.CENTER);
-        targetLabel.setFont(Settings.Font12);
-        targetText.setFont(Settings.Font12);
+        targetLabel.setFont(Settings.Font14);
+        targetText.setFont(Settings.Font14);
         targetText.setText(t);
-        if (!textFieldChange) {
+
+        if (!textFieldChange)
             targetText.setEditable(false);
-            targetText.setBorder(BorderFactory.createEtchedBorder());
-        }
-        targetLine.add(targetLabel, new LinearConstraints().setWeight(4));
-        targetLine.add(targetText, new LinearConstraints().setWeight(6));
-        targetLabel.setBackground(Color.white);
-        targetText.setBackground(Color.WHITE);
-        targetLine.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding)); //상하좌우 10씩 띄우기
-        add(targetLine, new LinearConstraints().setWeight(2).setLinearSpace(LinearSpace.MATCH_PARENT));
+
+        targetLine.add(targetLabel, new LinearConstraints().setWeight(4).setLinearSpace(LinearSpace.WRAP_CENTER_CONTENT));
+        targetLine.add(targetText, new LinearConstraints().setWeight(6).setLinearSpace(LinearSpace.WRAP_CENTER_CONTENT));
+        targetLine.setBorder(BorderFactory.createEmptyBorder(padding + 10, padding, padding, padding));
+        add(targetLine, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
     }
 
     public void makeButtonLine() {
-        DialogDefaultPanel.ClickListener clickListener = new DialogDefaultPanel.ClickListener();
         JPanel targetLine = eachLine[lineCount++] = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10));
-        targetLine.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding)); //상하좌우 10씩 띄우기 //!!!
+        targetLine.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
         targetLine.add(okBtn = new JButton("OK"), new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.WRAP_CENTER_CONTENT));
-        okBtn.setFont(Settings.Font12);
+        okBtn.setFont(Settings.Font14);
         okBtn.setFocusPainted(false);
         okBtn.addActionListener(clickListener);
 
         if (dialog != DIALOG.INFO && dialog != DIALOG.MINING && dialog != DIALOG.FIND && dialog != DIALOG.TRACK) {
             targetLine.add(cancelBtn = new JButton("CANCEL"), new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.WRAP_CENTER_CONTENT));
-            cancelBtn.setFont(Settings.Font12);
+            cancelBtn.setFont(Settings.Font14);
             cancelBtn.setFocusPainted(false);
             cancelBtn.addActionListener(clickListener);
         }
-        add(targetLine, new LinearConstraints().setWeight(2).setLinearSpace(LinearSpace.MATCH_PARENT));
-    }
 
-    public void makeFindButtonLine() {
-        ClickListener clickListener = new ClickListener();
-        JPanel targetLine = eachLine[lineCount++] = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10));
-        targetLine.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding)); //상하좌우 10씩 띄우기 //!!!
-        targetLine.add(findBtn = new JButton("Find"), new LinearConstraints().setWeight(4).setLinearSpace(LinearSpace.WRAP_CENTER_CONTENT));
-        findBtn.setFont(Settings.Font12);
-        findBtn.setFocusPainted(false);
-        findBtn.addActionListener(clickListener);
-        add(targetLine, new LinearConstraints().setWeight(2).setLinearSpace(LinearSpace.MATCH_PARENT));
+        add(targetLine, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
     }
 
     public void makeTrackButtonLine() {
-        DialogDefaultPanel.ClickListener clickListener = new DialogDefaultPanel.ClickListener();
-        JPanel targetLine = eachLine[lineCount++] = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10));
-        targetLine.setBackground(Color.WHITE);
-        targetLine.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding)); //상하좌우 10씩 띄우기 //!!!
+        JPanel targetLine = eachLine[lineCount++] = new JPanel(new LinearLayout(Orientation.HORIZONTAL));
+        targetLine.setBorder(BorderFactory.createEmptyBorder(0, padding, 0, padding));
         targetLine.add(trackBtn = new JButton("Track"), new LinearConstraints().setWeight(4).setLinearSpace(LinearSpace.WRAP_CENTER_CONTENT));
-        trackBtn.setFont(Settings.Font12);
-        trackBtn.setBackground(Color.WHITE);
+        trackBtn.setFont(Settings.Font14);
         trackBtn.setFocusPainted(false);
         trackBtn.addActionListener(clickListener);
-        add(targetLine, new LinearConstraints().setWeight(2).setLinearSpace(LinearSpace.MATCH_PARENT));
+        add(targetLine, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
     }
 
     class ClickListener implements ActionListener {
@@ -135,26 +120,25 @@ public class DialogDefaultPanel extends JPanel {
                     SwingUtilities.getWindowAncestor(clicked).dispose();
                 } else if (dialog == DIALOG.ADDPRODUCT) {
                     // add 창에서 product 추가인 경우.
-                    String cc = eachText[1].getText();
-                    String zc = eachText[2].getText();
+                    String cc = eachText[0].getText();
+                    String zc = eachText[1].getText();
+                    System.out.println(cc);
+                    System.out.println(zc);
+                    String count = eachText[2].getText();
                     // Product info가 빈칸일 때 경고 메시지.
-                    if (cc.equals("") || zc.equals("")) {
-                        JOptionPane.showMessageDialog(null, "Insert product information.", "Message", JOptionPane.WARNING_MESSAGE);
+                    if (cc.equals("") || zc.equals("") || count.equals("")) {
+                        JOptionPane.showMessageDialog(null,
+                                "Insert product information.",
+                                "Message", JOptionPane.WARNING_MESSAGE);
+                    } else if (cc.length() > 6 || zc.length() > 10) {
+                        JOptionPane.showMessageDialog(null,
+                                "Too long Country Code & Zip Code.",
+                                "Message", JOptionPane.WARNING_MESSAGE);
                     } else {
-                        MainFrame.bitcoinJSONRPCClient.gen_new_product(cc, zc);
-                        SwingUtilities.getWindowAncestor(clicked).dispose();
-                    }
-                } else if (dialog == DIALOG.ADDMANYPRODUCT) {
-                    String productNum = eachText[1].getText();
-                    if (productNum.equals("")) {
-                        JOptionPane.showMessageDialog(null, "Insert amount of products.", "Message", JOptionPane.WARNING_MESSAGE);
-                    } else {
-                        for (int i = 0; i < Integer.parseInt(productNum); i++) {
-                            String cc = String.valueOf(i);
-                            String zc = String.valueOf(i);
+                        for (int cnt = 0; cnt < Integer.valueOf(count); cnt++) {
                             MainFrame.bitcoinJSONRPCClient.gen_new_product(cc, zc);
-                            SwingUtilities.getWindowAncestor(clicked).dispose();
                         }
+                        SwingUtilities.getWindowAncestor(clicked).dispose();
                     }
                 } else if (dialog == DIALOG.IMPORTADDRESS) {
                     String account = eachText[0].getText();
@@ -241,36 +225,6 @@ public class DialogDefaultPanel extends JPanel {
                             e1.printStackTrace();
                         }
                     }
-                }
-            } else if (clicked == findBtn) {
-                MidPanel.getCurrentProducts();
-                String id = eachText[0].getText();
-                String cc = eachText[1].getText();
-                String zc = eachText[2].getText();
-                // Product info를 빈칸으로 뒀을 때 경고 메시지.
-                if (id.equals("") || cc.equals("") || zc.equals("")) {
-                    JOptionPane.showMessageDialog(null, "Insert product information.", "Message", JOptionPane.WARNING_MESSAGE);
-                } else {
-                    JTable productTable = MidPanel.getProductTable();
-                    DefaultTableModel productTableModel = MidPanel.getProductTableModel();
-                    int resultRow = -1;
-                    for (int r = 0; r < productTable.getRowCount(); r++) {
-                        if (productTableModel.getValueAt(r, 1).equals(id) &&
-                                productTableModel.getValueAt(r, 2).equals(cc) &&
-                                productTableModel.getValueAt(r, 3).equals(zc
-                                )) {
-                            resultRow = r;
-                            break;
-                        }
-                    }
-                    if (resultRow == -1) {
-                        JOptionPane.showMessageDialog(null, "There is no " + id, "Message", JOptionPane.WARNING_MESSAGE);
-                        SwingUtilities.getWindowAncestor(clicked).dispose();
-                        return;
-                    }
-                    productTable.setRowSelectionInterval(resultRow, resultRow);
-                    productTable.scrollRectToVisible(productTable.getCellRect(resultRow, productTable.getColumnCount(), true));
-                    SwingUtilities.getWindowAncestor(clicked).dispose();
                 }
             } else if (clicked == trackBtn) {
                 // table을 초기화 시켜주기 위해서

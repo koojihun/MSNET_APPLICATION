@@ -1,7 +1,7 @@
 package com.newSystem;
 
 import com.newSystem.Bitcoins.Bitcoind;
-import com.newSystem.QRCode.QRMaker;
+import com.QRCode.QRMaker;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,13 +32,13 @@ class MenuBar {
         menuBar = new JMenuBar();
         menuBar.setBackground(Color.WHITE);
         menuFile = new JMenu("File");
-        menuFile.setFont(Settings.Font12);
+        menuFile.setFont(Settings.Font14);
         menuFile.setBackground(Color.WHITE);
         menuWindow = new JMenu("Window");
-        menuWindow.setFont(Settings.Font12);
+        menuWindow.setFont(Settings.Font14);
         menuWindow.setBackground(Color.WHITE);
         menuHelp = new JMenu("Help");
-        menuHelp.setFont(Settings.Font12);
+        menuHelp.setFont(Settings.Font14);
         menuHelp.setBackground(Color.WHITE);
         menuBar.add(menuFile);
         menuBar.add(menuWindow);
@@ -47,7 +47,7 @@ class MenuBar {
         // File Menu
         // [File - Open...]: Open bitcoin folder
         menuItem_File_Open = new JMenuItem("Open...");
-        menuItem_File_Open.setFont(Settings.Font12);
+        menuItem_File_Open.setFont(Settings.Font14);
         menuFile.add(menuItem_File_Open);
 
         menuItem_File_Open.addMouseListener(new MouseListener() {
@@ -85,7 +85,7 @@ class MenuBar {
         });
         // [File - Bitcoind Restart]: Bitcoind restart
         menuItem_File_BitcoindRestart = new JMenuItem("Bitcoind Restart");
-        menuItem_File_BitcoindRestart.setFont(Settings.Font12);
+        menuItem_File_BitcoindRestart.setFont(Settings.Font14);
         menuFile.add(menuItem_File_BitcoindRestart);
         menuItem_File_BitcoindRestart.addMouseListener(new MouseListener() {
             @Override
@@ -121,7 +121,7 @@ class MenuBar {
         // File Menu
         // [File - QR Code Generate]: Create QR Codes.
         menuItem_File_qr = new JMenuItem("QR Code generate");
-        menuItem_File_qr.setFont(Settings.Font12);
+        menuItem_File_qr.setFont(Settings.Font14);
         menuFile.add(menuItem_File_qr);
         menuItem_File_qr.addMouseListener(new MouseListener() {
             @Override
@@ -157,7 +157,7 @@ class MenuBar {
 
         // [File - Exit]: End program
         menuItem_File_Exit = new JMenuItem("Exit");
-        menuItem_File_Exit.setFont(Settings.Font12);
+        menuItem_File_Exit.setFont(Settings.Font14);
         menuFile.add(menuItem_File_Exit);
         menuItem_File_Exit.addMouseListener(new MouseListener() {
             @Override
@@ -193,12 +193,12 @@ class MenuBar {
 
         // Window Menu
         menuItem_Window_Preference = new JMenuItem("Preference");
-        menuItem_Window_Preference.setFont(Settings.Font12);
+        menuItem_Window_Preference.setFont(Settings.Font14);
         menuWindow.add(menuItem_Window_Preference);
 
         // Help Menu
         menuItem_Help_Licenses = new JMenuItem("Licenses");
-        menuItem_Help_Licenses.setFont(Settings.Font12);
+        menuItem_Help_Licenses.setFont(Settings.Font14);
         menuHelp.add(menuItem_Help_Licenses);
         menuItem_Help_Licenses.addMouseListener(new MouseListener() {
             @Override

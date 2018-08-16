@@ -3,6 +3,7 @@ package com.newSystem;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
+//import com.sun.tools.javac.Main;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -28,15 +29,24 @@ public class bitcoinServer extends Thread {
             StringBuilder response = new StringBuilder();
             Map <String,String> params = queryToMap(httpExchange.getRequestURI().getQuery());
             String method = params.get("method");
+            String pid;
+            String account;
+            String address;
             switch (Integer.valueOf(method)) {
+                case 0:
+                    // method:0 --> import address request.
+                    account = params.get("account");
+                    address = params.get("address");
+                    MainFrame.bitcoinJSONRPCClient.importAddress(address, account, true);
+                    break;
                 case 1:
-                    // method:1 --> send_to_address
-                    String address = params.get("address");
-                    String pid = params.get("pid");
+                    // method:1 --> send_to_address.
+                    address = params.get("address");
+                    pid = params.get("pid");
                     response.append(MainFrame.bitcoinJSONRPCClient.send_to_address(address, pid));
                     break;
                 case 2:
-                    // method:2 --> track_product
+                    // method:2 --> track_product.
                     String pid_to_track = params.get("pid");
                     response.append(MainFrame.bitcoinJSONRPCClient.track_product(pid_to_track));
                     break;
