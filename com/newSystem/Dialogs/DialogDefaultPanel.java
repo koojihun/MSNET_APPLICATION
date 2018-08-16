@@ -197,8 +197,7 @@ public class DialogDefaultPanel extends JPanel {
                     if (companyName.length() == 0) {
                         JOptionPane.showMessageDialog(null, "Insert name of Company.", "Message", JOptionPane.WARNING_MESSAGE);
                     } else {
-                        //String url = "http://166.104.126.21:9999/?method=0&account=" + companyName + "&address=" + MainFrame.bitcoinJSONRPCClient.get_account_address("");
-                        String url = "http://166.104.126.26:9999/?method=0&account=" + companyName + "&address=" + MainFrame.bitcoinJSONRPCClient.get_account_address("");
+                        String url = "http://166.104.126.21:9999/?method=0&account=" + companyName + "&address=" + MainFrame.bitcoinJSONRPCClient.get_account_address("");
                         try {
                             URL obj = new URL(url);
                             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
