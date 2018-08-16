@@ -30,16 +30,12 @@ class MenuBar {
 
     MenuBar(JFrame mainFrame) {
         menuBar = new JMenuBar();
-        menuBar.setBackground(Color.WHITE);
         menuFile = new JMenu("File");
         menuFile.setFont(Settings.Font14);
-        menuFile.setBackground(Color.WHITE);
         menuWindow = new JMenu("Window");
         menuWindow.setFont(Settings.Font14);
-        menuWindow.setBackground(Color.WHITE);
         menuHelp = new JMenu("Help");
         menuHelp.setFont(Settings.Font14);
-        menuHelp.setBackground(Color.WHITE);
         menuBar.add(menuFile);
         menuBar.add(menuWindow);
         menuBar.add(menuHelp);

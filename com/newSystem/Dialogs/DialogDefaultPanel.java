@@ -93,6 +93,10 @@ public class DialogDefaultPanel extends JPanel {
         add(targetLine, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
     }
 
+    public void makeLabelLine(String explanation) {
+
+    }
+
     public void makeTrackButtonLine() {
         JPanel targetLine = eachLine[lineCount++] = new JPanel(new LinearLayout(Orientation.HORIZONTAL));
         targetLine.setBorder(BorderFactory.createEmptyBorder(0, padding, 0, padding));
@@ -121,8 +125,6 @@ public class DialogDefaultPanel extends JPanel {
                     // add 창에서 product 추가인 경우.
                     String cc = eachText[0].getText();
                     String zc = eachText[1].getText();
-                    System.out.println(cc);
-                    System.out.println(zc);
                     String count = eachText[2].getText();
                     // Product info가 빈칸일 때 경고 메시지.
                     if (cc.equals("") || zc.equals("") || count.equals("")) {

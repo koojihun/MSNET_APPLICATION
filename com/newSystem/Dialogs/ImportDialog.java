@@ -36,7 +36,6 @@ public class ImportDialog extends JDialog {
         String[] col = { "Account", "Address" };
         DefaultTableModel importedAddressTableModel = new DefaultTableModel(col, 0);
         JTable importedAddressTable = new JTable(importedAddressTableModel);
-        importedAddressTable.getTableHeader().setBackground(Color.WHITE);
         importedAddressTable.setRowHeight(30);
         importedAddressTable.getTableHeader().setFont(Settings.Font19);
         importedAddressTable.setFont(Settings.Font14);
@@ -62,9 +61,7 @@ public class ImportDialog extends JDialog {
         importedAddressTable.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         JScrollPane scrollPane = new JScrollPane(importedAddressTable);
-        scrollPane.getViewport().setBackground(Color.WHITE);
-        scrollPane.setBackground(Color.WHITE);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         mainPanel.add(scrollPane, new LinearConstraints().setWeight(15).setLinearSpace(LinearSpace.MATCH_PARENT));
         setVisible(true);
@@ -89,12 +86,10 @@ public class ImportDialog extends JDialog {
             DialogDefaultPanel mainPanel = new DialogDefaultPanel(4, 20, DialogDefaultPanel.DIALOG.IMPORTADDRESS);
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
             JLabel explaination = new JLabel("Import an Address as account");
-            explaination.setBorder(BorderFactory.createEmptyBorder(50, 20, 20, 20));
-            explaination.setVerticalAlignment(SwingConstants.CENTER);
             explaination.setHorizontalAlignment(SwingConstants.CENTER);
-            explaination.setBackground(Color.WHITE);
             explaination.setFont(Settings.Font14);
-            mainPanel.add(explaination, new LinearConstraints().setWeight(2).setLinearSpace(LinearSpace.MATCH_PARENT));
+            explaination.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0));
+            mainPanel.add(explaination, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
             mainPanel.makeNonEmptyLine("Account", "", true);
             mainPanel.makeNonEmptyLine("Address", "", true);
             mainPanel.makeButtonLine();
@@ -118,7 +113,6 @@ public class ImportDialog extends JDialog {
             originalValue = value;
             return editor;
         }
-
         @Override
         public Object getCellEditorValue() {
             return originalValue;
