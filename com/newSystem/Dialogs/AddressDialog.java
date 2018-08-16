@@ -33,7 +33,7 @@ public class AddressDialog extends JDialog {
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         // 상단 버튼 패널 생성.
         JPanel btnPanel = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10));
-        btnPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 0, 20));
+        btnPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 0, 10));
         addBtn = new JButton("ADD");
         addBtn.setFont(Settings.Font18);
         addBtn.setFocusPainted(false);

@@ -25,13 +25,12 @@ public class MiningDialog extends JDialog {
         // Icon 설정
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("icon.png")));
         mainPanel = new DialogDefaultPanel(5, 20, DialogDefaultPanel.DIALOG.MINING);
-        mainPanel.makeEmptyLine();
 
         ClickListener miningClick = new ClickListener();
         JPanel buttonPanel = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10));
         oneBlock = new JButton("One Block");
         buttonPanel.add(oneBlock, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 0, 20));
         oneBlock.setFont(Settings.Font14);
         oneBlock.setFocusPainted(false);
         oneBlock.addActionListener(miningClick);
@@ -40,7 +39,7 @@ public class MiningDialog extends JDialog {
         autoMining.setFocusPainted(false);
         autoMining.addActionListener(miningClick);
         buttonPanel.add(autoMining, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
-        mainPanel.add(buttonPanel, new LinearConstraints().setWeight(2).setLinearSpace(LinearSpace.MATCH_PARENT));
+        mainPanel.add(buttonPanel, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
         mainPanel.makeNonEmptyLine("Seconds", "", true);
         mainPanel.makeButtonLine();
         add(mainPanel);
@@ -63,7 +62,7 @@ public class MiningDialog extends JDialog {
                     dispose();
                 }
             } else if (clicked == autoMining) {
-                String seconds = mainPanel.eachText[1].getText();
+                String seconds = mainPanel.eachText[0].getText();
                 // Tx size 또는 Seconds가 빈칸일 때 경고 메시지.
                 if (seconds.equals("")) {
                     JOptionPane.showMessageDialog(null, "Mining block every 100 seconds", "Message", JOptionPane.INFORMATION_MESSAGE);
