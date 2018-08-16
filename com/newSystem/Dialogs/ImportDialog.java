@@ -21,7 +21,7 @@ public class ImportDialog extends JDialog {
     public ImportDialog() {
         setTitle("Imported Addresses (Only For Server)");
         JPanel mainPanel = new JPanel(new LinearLayout(Orientation.VERTICAL, 10));
-        setSize(550, 800);
+        setSize(600, 800);
         setLocation(200, 200);
         // Icon 설정
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("icon.png")));
@@ -29,7 +29,7 @@ public class ImportDialog extends JDialog {
 
         importAddressBtn = new JButton("Import Address");
         mainPanel.add(importAddressBtn, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
-        importAddressBtn.setFont(Settings.Font12);
+        importAddressBtn.setFont(Settings.Font14);
         importAddressBtn.setFocusPainted(false);
         importAddressBtn.addActionListener(new ClickListener());
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,8 +38,9 @@ public class ImportDialog extends JDialog {
         JTable importedAddressTable = new JTable(importedAddressTableModel);
         importedAddressTable.getTableHeader().setBackground(Color.WHITE);
         importedAddressTable.setRowHeight(30);
-        importedAddressTable.getTableHeader().setFont(Settings.Font16);
-        importedAddressTable.setFont(Settings.Font12);
+        importedAddressTable.getTableHeader().setFont(Settings.Font19);
+        importedAddressTable.setFont(Settings.Font14);
+        importedAddressTable.setDefaultEditor(Object.class, new MyCellEditor());
         java.util.List<Map> maps = MainFrame.bitcoinJSONRPCClient.enumerate_account_info(); {
             for (Map map : maps) {
                 String account = (String) map.get("account");
@@ -92,7 +93,7 @@ public class ImportDialog extends JDialog {
             explaination.setVerticalAlignment(SwingConstants.CENTER);
             explaination.setHorizontalAlignment(SwingConstants.CENTER);
             explaination.setBackground(Color.WHITE);
-            explaination.setFont(Settings.Font12);
+            explaination.setFont(Settings.Font14);
             mainPanel.add(explaination, new LinearConstraints().setWeight(2).setLinearSpace(LinearSpace.MATCH_PARENT));
             mainPanel.makeNonEmptyLine("Account", "", true);
             mainPanel.makeNonEmptyLine("Address", "", true);
@@ -102,4 +103,26 @@ public class ImportDialog extends JDialog {
             setVisible(true);
         }
     }
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // product table의 내용물을 edit해도 focus를 잃으면 원래 값으로 돌아가도록 하기 위한 CellEditor 조작.
+    private class MyCellEditor extends DefaultCellEditor {
+        private Object originalValue;
+        public MyCellEditor() {
+            super(new JTextField());
+        }
+        public Component getTableCellEditorComponent(JTable table, Object value,
+                                                     boolean isSelected,
+                                                     int row, int column) {
+            JTextField editor = (JTextField) super.getTableCellEditorComponent(table, value, isSelected,
+                    row, column);
+            originalValue = value;
+            return editor;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return originalValue;
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////
 }

@@ -1,18 +1,17 @@
 package com.newSystem;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.*;
-import java.net.URL;
 
 public class Settings {
     static private String userNmae;
     static private String rpcUser;
     static private String rpcPassword;
     private Font font;
-    static public Font Font12;
-    static public Font Font15;
-    static public Font Font16;
+    static public Font Font14;
+    static public Font Font18;
+    static public Font Font19;
+    static public Image icon;
     public Settings() {
         ////////////////////////////////////////////////////////////////
         userNmae = System.getProperty("user.name");
@@ -27,33 +26,23 @@ public class Settings {
         // tempuser, temppassord로 파일을 생성.
         if (!isThereConfFile())
             makeConfFile();
-            // bitcoin.conf 파일에서 rpcuser와 rpcpassword를 읽어 오는 함수.
+        // bitcoin.conf 파일에서 rpcuser와 rpcpassword를 읽어 오는 함수.
         getRPCUserInfo();
         /////////////////////////////////////////////////////////////
-        // 폰트 추가.
-        ClassLoader classLoader = getClass().getClassLoader();
-        URL fontUrl = classLoader.getResource("DejaVuSansMono.ttf");
-        try {
-            font = Font.createFont(Font.TRUETYPE_FONT, fontUrl.openStream());
-        } catch (Exception e) {
-            System.err.println("Font loading Error.");
-        }
-        Font12 = font.deriveFont(Font.PLAIN, 12);
-        Font15 = font.deriveFont(Font.PLAIN, 15);
-        Font16 = font.deriveFont(Font.PLAIN, 16);
+        // 폰트 설정.
+        Font14 = new Font("Consolas", Font.PLAIN, 14);
+        Font18 = new Font("Consolas", Font.PLAIN, 18);
+        Font19 = new Font("Consolas", Font.PLAIN, 19);
         ////////////////////////////////////////////////////////////////
         // License.txt 파일 복사.
         if (!isThereLicense())
             copyLicense();
         ////////////////////////////////////////////////////////////////
-        globalUISettings();
-        ////////////////////////////////////////////////////////////////
+        // Icon 설정
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        icon = toolkit.getImage(getClass().getClassLoader().getResource("icon.png"));
     }
-    private void globalUISettings() {
-        UIManager.put("Panel.background", Color.WHITE);
-        UIManager.put("Button.background", Color.WHITE);
-    }
-    static public String getUserNmae() { return userNmae; }
+    public static String getUserNmae() { return userNmae; }
     public void getRPCUserInfo() {
         try {
             ////////////////////////////////////////////////////////////////
@@ -76,7 +65,6 @@ public class Settings {
             in.close();
             ////////////////////////////////////////////////////////////////
         } catch (IOException e) {
-            // 에러가 있다면 메시지 출력
             System.err.println("Error : From reading rpcuser & rpcpassword from bitcoin.conf file.");
             System.exit(1);
         }
@@ -88,14 +76,14 @@ public class Settings {
         return rpcPassword;
     }
     private boolean isThereConfFile() {
-        File bitcoinDIrectory = new File(
+        File confFile = new File(
                 "C:\\Users\\"
                         + userNmae
                         + "\\AppData\\Roaming\\Bitcoin\\bitcoin.conf");
-        if (bitcoinDIrectory.exists() && bitcoinDIrectory.isDirectory())
+        if (confFile.exists())
             return true;
-        else
-            return false;
+
+        return false;
     }
     private boolean isThereBitcoind() {
         ///////////////////////////////////////////////////////////
@@ -172,7 +160,7 @@ public class Settings {
         }
     }
     private void makeConfFile() {
-        String rpcuser = "tempuser";
+        String rpcuser = userNmae;
         String rpcpassword = "tempassword";
         String fileName = "C:\\Users\\" + userNmae + "\\AppData\\Roaming\\Bitcoin\\bitcoin.conf";
         try{

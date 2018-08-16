@@ -32,11 +32,11 @@ public class MiningDialog extends JDialog {
         oneBlock = new JButton("One Block");
         buttonPanel.add(oneBlock, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
-        oneBlock.setFont(Settings.Font12);
+        oneBlock.setFont(Settings.Font14);
         oneBlock.setFocusPainted(false);
         oneBlock.addActionListener(miningClick);
         autoMining = new JButton("Auto Mining");
-        autoMining.setFont(Settings.Font12);
+        autoMining.setFont(Settings.Font14);
         autoMining.setFocusPainted(false);
         autoMining.addActionListener(miningClick);
         buttonPanel.add(autoMining, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));

@@ -4,6 +4,7 @@ import com.mommoo.flat.layout.linear.LinearLayout;
 import com.mommoo.flat.layout.linear.Orientation;
 import com.mommoo.flat.layout.linear.constraints.LinearConstraints;
 import com.mommoo.flat.layout.linear.constraints.LinearSpace;
+import com.newSystem.MidPanel;
 import com.newSystem.Settings;
 
 import javax.swing.*;
@@ -18,27 +19,29 @@ import java.util.ArrayList;
 public class AddressDialog extends JDialog {
     private JButton addBtn;
     private JButton deleteBtn;
+    private ClickListener clickListener;
     static public DefaultTableModel savedAddressTableModel;
     static public JTable savedAddressTable;
     public AddressDialog() {
         setTitle("Address Book");
         JPanel mainPanel = new JPanel(new LinearLayout(Orientation.VERTICAL, 10));
-        setSize(550, 800);
+        setSize(600, 800);
         setLocation(200, 200);
-        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("icon.png")));
+        setIconImage(Settings.icon);
         add(mainPanel);
+        clickListener = new ClickListener();
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         // 상단 버튼 패널 생성.
         JPanel btnPanel = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10));
         btnPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 0, 20));
         addBtn = new JButton("ADD");
-        addBtn.setFont(Settings.Font15);
+        addBtn.setFont(Settings.Font18);
         addBtn.setFocusPainted(false);
-        addBtn.addActionListener(new ClickListener());
+        addBtn.addActionListener(clickListener);
         deleteBtn = new JButton("Delete");
-        deleteBtn.setFont(Settings.Font15);
+        deleteBtn.setFont(Settings.Font18);
         deleteBtn.setFocusPainted(false);
-        deleteBtn.addActionListener(new ClickListener());
+        deleteBtn.addActionListener(clickListener);
         btnPanel.add(addBtn, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
         btnPanel.add(deleteBtn, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
         //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,10 +51,10 @@ public class AddressDialog extends JDialog {
         String[] col = {"Name", "Address"};
         savedAddressTableModel = new DefaultTableModel(col, 0);
         savedAddressTable = new JTable(savedAddressTableModel);
-        savedAddressTable.getTableHeader().setBackground(Color.WHITE);
         savedAddressTable.setRowHeight(30);
-        savedAddressTable.getTableHeader().setFont(Settings.Font16);
-        savedAddressTable.setFont(Settings.Font12);
+        savedAddressTable.getTableHeader().setFont(Settings.Font19);
+        savedAddressTable.setFont(Settings.Font14);
+        savedAddressTable.setDefaultEditor(Object.class, new MyCellEditor());
         //////////////////////////////////////////////////////////////////////////////////////////////////////
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -59,9 +62,7 @@ public class AddressDialog extends JDialog {
         savedAddressTable.getColumnModel().getColumn(1).setCellRenderer(centerRenderer);
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         JScrollPane scrollPane = new JScrollPane(savedAddressTable);
-        scrollPane.getViewport().setBackground(Color.WHITE);
-        scrollPane.setBackground(Color.WHITE);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
         mainPanel.add(scrollPane, new LinearConstraints().setWeight(15).setLinearSpace(LinearSpace.MATCH_PARENT));
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -165,4 +166,26 @@ public class AddressDialog extends JDialog {
             setVisible(true);
         }
     }
+    //////////////////////////////////////////////////////////////////////////////////////////
+    // product table의 내용물을 edit해도 focus를 잃으면 원래 값으로 돌아가도록 하기 위한 CellEditor 조작.
+    private class MyCellEditor extends DefaultCellEditor {
+        private Object originalValue;
+        public MyCellEditor() {
+            super(new JTextField());
+        }
+        public Component getTableCellEditorComponent(JTable table, Object value,
+                                                     boolean isSelected,
+                                                     int row, int column) {
+            JTextField editor = (JTextField) super.getTableCellEditorComponent(table, value, isSelected,
+                    row, column);
+            originalValue = value;
+            return editor;
+        }
+
+        @Override
+        public Object getCellEditorValue() {
+            return originalValue;
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////
 }

@@ -1,4 +1,4 @@
-package com.newSystem.QRCode;
+package com.QRCode;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.client.j2se.MatrixToImageConfig;

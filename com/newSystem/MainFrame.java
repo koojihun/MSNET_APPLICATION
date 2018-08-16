@@ -1,5 +1,6 @@
 package com.newSystem;
 
+import com.alee.laf.WebLookAndFeel;
 import com.mommoo.flat.layout.linear.LinearLayout;
 import com.mommoo.flat.layout.linear.Orientation;
 import com.mommoo.flat.layout.linear.constraints.LinearConstraints;
@@ -8,7 +9,6 @@ import com.newSystem.Bitcoins.Bitcoind;
 import com.bitcoinClient.javabitcoindrpcclient.BitcoinJSONRPCClient;
 
 import javax.swing.*;
-import java.awt.*;
 import java.net.MalformedURLException;
 
 public class MainFrame extends JFrame {
@@ -19,13 +19,13 @@ public class MainFrame extends JFrame {
     private MenuBar menuBar;
 
     MainFrame() {
-        super.setSize(1000, 630);
+        super.setSize(1200, 800);
         setLocationRelativeTo(null); // 화면 중앙에 생기게 하는 옵션.
+
         setTitle("MSNet");
 
         // Icon 설정
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        setIconImage(toolkit.getImage(getClass().getClassLoader().getResource("icon.png")));
+        setIconImage(Settings.icon);
 
         try {
             bitcoinJSONRPCClient = new BitcoinJSONRPCClient(Settings.getRpcUser(), Settings.getRpcPassword());
@@ -65,12 +65,15 @@ public class MainFrame extends JFrame {
 
     /*****************************************************/
     public static void main(String[] args) throws Exception {
-        UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsClassicLookAndFeel");
-
+        UIManager.setLookAndFeel(new WebLookAndFeel());
         new Settings();
+
         MainFrame mainFrame = new MainFrame();
+
+        // bincoind 실행 쓰레드
         new Bitcoind(midPanel.getBitcoindArea()).start();
 
+        // bincoind로 rpc 명령을 전달하는 서버를 돌리는 쓰레드.
         new bitcoinServer().start();
     }
     /*****************************************************/
