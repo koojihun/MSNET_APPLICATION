@@ -68,7 +68,6 @@ public class MiningDialog extends JDialog {
                     JOptionPane.showMessageDialog(null, "Mining block every 100 seconds", "Message", JOptionPane.INFORMATION_MESSAGE);
                     MainFrame.bitcoinJSONRPCClient.auto_set_generate(100);
                 } else {
-                    System.out.println(seconds);
                     JOptionPane.showMessageDialog(null, "Mining block every " + seconds + " seconds", "Message", JOptionPane.INFORMATION_MESSAGE);
                     MainFrame.bitcoinJSONRPCClient.auto_set_generate(Integer.parseInt(seconds));
                     dispose();

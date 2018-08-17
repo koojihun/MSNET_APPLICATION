@@ -26,6 +26,7 @@ public class bitcoinServer extends Thread {
     public class  Handler implements HttpHandler {
         @Override
         public void handle(HttpExchange httpExchange) throws IOException {
+            System.out.println(httpExchange.getRemoteAddress().getAddress());
             StringBuilder response = new StringBuilder();
             Map <String,String> params = queryToMap(httpExchange.getRequestURI().getQuery());
             String method = params.get("method");

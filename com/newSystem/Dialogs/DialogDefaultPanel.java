@@ -196,9 +196,7 @@ public class DialogDefaultPanel extends JPanel {
                     String companyName = eachText[1].getText();
                     if (companyName.length() == 0) {
                         JOptionPane.showMessageDialog(null, "Insert name of Company.", "Message", JOptionPane.WARNING_MESSAGE);
-
                     } else {
-                        //String url = "http://166.104.126.21:9999/?method=0&account=" + companyName + "&address=" + MainFrame.bitcoinJSONRPCClient.get_account_address("");
                         String url = "http://166.104.126.21:9999/?method=0&account=" + companyName + "&address=" + MainFrame.bitcoinJSONRPCClient.get_account_address("");
                         try {
                             URL obj = new URL(url);
@@ -209,10 +207,7 @@ public class DialogDefaultPanel extends JPanel {
                             con.setRequestProperty("Accept-Charset", "UTF-8");
                             con.setRequestProperty("Content-Type", "text/plain; charset=utf-8");
                             int responseCode = con.getResponseCode();
-                            System.out.println("\nSending 'GET' request to URL : " + url);
-                            System.out.println("Response Code : " + responseCode);
-                            BufferedReader in = new BufferedReader(
-                                    new InputStreamReader(con.getInputStream()));
+                            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
                             String inputLine;
                             StringBuffer response = new StringBuffer();
 
@@ -220,9 +215,6 @@ public class DialogDefaultPanel extends JPanel {
                                 response.append(inputLine);
                             }
                             in.close();
-
-                            //print result
-                            System.out.println(response.toString());
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         }
@@ -244,7 +236,6 @@ public class DialogDefaultPanel extends JPanel {
                         int resultSize = result.size();
                         int count = 0;
                         String[][] rows = new String[result.size()][3];
-
                         for (Map map : result) {
                             rows[count][0] = String.valueOf(resultSize);
                             rows[count][1] = String.valueOf(map.get("\"Time\""));
@@ -252,9 +243,8 @@ public class DialogDefaultPanel extends JPanel {
                             count++;
                             resultSize--;
                         }
-                        for (int i = result.size() - 1; i >= 0; i--) {
+                        for (int i = result.size() - 1; i >= 0; i--)
                             TrackDialog.getTrackTableModel().addRow(rows[i]);
-                        }
                     } catch (ClassCastException err) {
                         JOptionPane.showMessageDialog(null, "There is no product " + id, "Message", JOptionPane.WARNING_MESSAGE);
                     }

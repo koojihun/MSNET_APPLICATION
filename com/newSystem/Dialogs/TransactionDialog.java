@@ -18,7 +18,6 @@ public class TransactionDialog extends JDialog {
         DialogDefaultPanel panel = new DialogDefaultPanel(12, 10, DialogDefaultPanel.DIALOG.TXINFO);
         add(panel);
         setVisible(true);
-        System.out.println(transaction.details());
         /*
 
         java.util.List<Map> maps = transaction.details();
