@@ -1552,7 +1552,7 @@ public interface BitcoindRpcClient {
    *  
    * @see <a href="https://bitcoin.org/en/developer-reference#gettransaction">gettransaction</a>
    */
-  Transaction get_transaction(String txId);
+  Transaction get_transaction(String txId, boolean watchOnly);
   
   /**
    * The gettxout RPC returns details about an unspent transaction output (UTXO).
@@ -1581,7 +1581,7 @@ public interface BitcoindRpcClient {
    * @param zipCode - product zip code
    * Must be called before set_generate
    */
-  void gen_new_product(String countryCode, String zipCode);
+  String gen_new_product(String countryCode, String zipCode);
   boolean find_product(String id, long countryCode, long zipCode);
   /**
    * For MSNet - Added by Juhan

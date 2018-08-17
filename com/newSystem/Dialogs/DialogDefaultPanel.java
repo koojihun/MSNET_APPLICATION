@@ -1,6 +1,5 @@
 package com.newSystem.Dialogs;
 
-
 import com.mommoo.flat.layout.linear.LinearLayout;
 import com.mommoo.flat.layout.linear.Orientation;
 import com.mommoo.flat.layout.linear.constraints.LinearConstraints;
@@ -9,23 +8,21 @@ import com.newSystem.Bitcoins.Bitcoind;
 import com.newSystem.MainFrame;
 import com.newSystem.MidPanel;
 import com.newSystem.Settings;
-
-
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.net.URL;
+import java.util.List;
+import static com.newSystem.MainFrame.bitcoinJSONRPCClient;
 
 public class DialogDefaultPanel extends JPanel {
     public enum DIALOG {
-        ADDPRODUCT, ADDMANYPRODUCT, ADDADDRESS, ADDPEER, INFO, MINING, FIND, TRACK, IMPORTADDRESS, TXINFO, SAVEADDRESS, SENDADDRESSTOSERVER
+        ADDPRODUCT, ADDADDRESS, ADDPEER, INFO, MINING, FIND, TRACK, IMPORTADDRESS, TXINFO, SAVEADDRESS, SENDADDRESSTOSERVER, TRACKLOCATION
     }
 
     public JPanel[] eachLine; // if total = 4 Lines, 4th line will contain ok & cancel buttons.
@@ -33,7 +30,6 @@ public class DialogDefaultPanel extends JPanel {
     public JTextField[] eachText;
     JButton okBtn;
     JButton cancelBtn;
-    JButton findBtn;
     JButton trackBtn;
     int lineCount;
     int padding;
@@ -84,18 +80,13 @@ public class DialogDefaultPanel extends JPanel {
         okBtn.setFocusPainted(false);
         okBtn.addActionListener(clickListener);
 
-        if (dialog != DIALOG.INFO && dialog != DIALOG.MINING && dialog != DIALOG.FIND && dialog != DIALOG.TRACK) {
+        if (dialog != DIALOG.INFO && dialog != DIALOG.MINING && dialog != DIALOG.FIND && dialog != DIALOG.TRACK && dialog != DIALOG.TXINFO) {
             targetLine.add(cancelBtn = new JButton("CANCEL"), new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.WRAP_CENTER_CONTENT));
             cancelBtn.setFont(Settings.Font14);
             cancelBtn.setFocusPainted(false);
             cancelBtn.addActionListener(clickListener);
         }
-
         add(targetLine, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
-    }
-
-    public void makeLabelLine(String explanation) {
-
     }
 
     public void makeTrackButtonLine() {
@@ -113,14 +104,14 @@ public class DialogDefaultPanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             JButton clicked = (JButton) e.getSource();
             // Info 와 Mining 창은 버튼이 1개이므로 눌리면 바로 종료.
-            if (clicked == cancelBtn || dialog == DIALOG.INFO || dialog == DIALOG.MINING)
+            if (clicked == cancelBtn || dialog == DIALOG.INFO || dialog == DIALOG.MINING || dialog == DIALOG.TXINFO)
                 // 해당 다이얼로그 종료.
                 SwingUtilities.getWindowAncestor(clicked).dispose();
             else if (clicked == okBtn) {
                 if (dialog == DIALOG.ADDADDRESS) {
                     // add 창에서 address 추가인 경우 첫번째라인은 비어 있음.
                     String account = eachText[1].getText();
-                    MainFrame.bitcoinJSONRPCClient.get_new_address(account);
+                    bitcoinJSONRPCClient.get_new_address(account);
                     SwingUtilities.getWindowAncestor(clicked).dispose();
                 } else if (dialog == DIALOG.ADDPRODUCT) {
                     // add 창에서 product 추가인 경우.
@@ -137,8 +128,15 @@ public class DialogDefaultPanel extends JPanel {
                                 "Too long Country Code & Zip Code.",
                                 "Message", JOptionPane.WARNING_MESSAGE);
                     } else {
-                        for (int cnt = 0; cnt < Integer.valueOf(count); cnt++) {
-                            MainFrame.bitcoinJSONRPCClient.gen_new_product(cc, zc);
+                        try {
+                            FileWriter fw = new FileWriter("C:\\Users\\" + Settings.getUserNmae() + "\\AppData\\Roaming\\Bitcoin\\ProductList.txt", true);
+                            for (int cnt = 0; cnt < Integer.valueOf(count); cnt++) {
+                                String tmpPID = bitcoinJSONRPCClient.gen_new_product(cc, zc);
+                                fw.write(tmpPID + "\r\n");
+                            }
+                            fw.close();
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
                         }
                         SwingUtilities.getWindowAncestor(clicked).dispose();
                     }
@@ -149,7 +147,7 @@ public class DialogDefaultPanel extends JPanel {
                     if (account.equals("") || address.equals("")) {
                         JOptionPane.showMessageDialog(null, "Insert Account and Address.", "Message", JOptionPane.WARNING_MESSAGE);
                     } else {
-                        MainFrame.bitcoinJSONRPCClient.importAddress(address, account, true);
+                        bitcoinJSONRPCClient.importAddress(address, account, true);
                         SwingUtilities.getWindowAncestor(clicked).dispose();
                         new ImportDialog();
                     }
@@ -197,7 +195,7 @@ public class DialogDefaultPanel extends JPanel {
                     if (companyName.length() == 0) {
                         JOptionPane.showMessageDialog(null, "Insert name of Company.", "Message", JOptionPane.WARNING_MESSAGE);
                     } else {
-                        String url = "http://166.104.126.21:9999/?method=0&account=" + companyName + "&address=" + MainFrame.bitcoinJSONRPCClient.get_account_address("");
+                        String url = "http://166.104.126.21:9999/?method=0&account=" + companyName + "&address=" + bitcoinJSONRPCClient.get_account_address("");
                         try {
                             URL obj = new URL(url);
                             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -210,7 +208,6 @@ public class DialogDefaultPanel extends JPanel {
                             BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
                             String inputLine;
                             StringBuffer response = new StringBuffer();
-
                             while ((inputLine = in.readLine()) != null) {
                                 response.append(inputLine);
                             }
@@ -218,7 +215,76 @@ public class DialogDefaultPanel extends JPanel {
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         }
+                        SwingUtilities.getWindowAncestor(clicked).dispose();
                     }
+                } else if (dialog == DIALOG.TRACKLOCATION) {
+                    HashMap<String, Integer> map = new HashMap<String, Integer>();
+                    HashMap<String, List<String>> mapPID = new HashMap<String, List<String>>();
+                    String filename = eachText[0].getText();
+
+                    try {
+                        BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\" + Settings.getUserNmae() + "\\AppData\\Roaming\\Bitcoin\\" + filename));
+                        while (true) {
+                            String pID = br.readLine();
+                            if (pID == null) {
+                                break;
+                            } else {
+                                List<Map> track_prouct_Result = MainFrame.bitcoinJSONRPCClient.track_product(pID);
+                                if (track_prouct_Result.size() != 0) {
+                                    String userID = track_prouct_Result.get(0).get("\"ID\"").toString();
+                                    // List<String> tmp = new List<String>();
+                                    // mapPID.put(userID, tmp);
+                                    if (map.containsKey(userID)) {
+                                        map.put(userID, map.get(userID) + 1);
+                                        //mapPID.get(userID).add(pID);
+                                    } else {
+                                        map.put(track_prouct_Result.get(0).get("\"ID\"").toString(), 1);
+                                        mapPID.get(userID).add(pID);
+                                    }
+                                }
+                            }
+                        }
+                        br.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    TrackLocationDialog.getTrackLocationTableModel().setNumRows(0);
+                    Iterator<String> itr = map.keySet().iterator();
+                    String[] row = new String[3];
+                    int count = 0;
+                    while (itr.hasNext()) {
+                        String key = (String) itr.next();
+                        int value = map.get(key);
+                        count++;
+                        row[0] = String.valueOf(count);
+                        row[1] = key;
+                        row[2] = String.valueOf(value);
+                        TrackLocationDialog.getTrackLocationTableModel().addRow(row);
+                    }
+                    TrackLocationDialog.getTrackLocationTable().addMouseListener(new MouseListener() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            if(e.getClickCount() == 2){
+                                System.out.println("");
+                            }
+                        }
+
+                        @Override
+                        public void mousePressed(MouseEvent e) {
+                        }
+
+                        @Override
+                        public void mouseReleased(MouseEvent e) {
+                        }
+
+                        @Override
+                        public void mouseEntered(MouseEvent e) {
+                        }
+
+                        @Override
+                        public void mouseExited(MouseEvent e) {
+                        }
+                    });
                 }
             } else if (clicked == trackBtn) {
                 // table을 초기화 시켜주기 위해서
@@ -232,7 +298,7 @@ public class DialogDefaultPanel extends JPanel {
                     JOptionPane.showMessageDialog(null, "Insert Product ID.", "Message", JOptionPane.WARNING_MESSAGE);
                 } else {
                     try {
-                        List<Map> result = MainFrame.bitcoinJSONRPCClient.track_product(id);
+                        List<Map> result = bitcoinJSONRPCClient.track_product(id);
                         int resultSize = result.size();
                         int count = 0;
                         String[][] rows = new String[result.size()][3];
@@ -240,6 +306,7 @@ public class DialogDefaultPanel extends JPanel {
                             rows[count][0] = String.valueOf(resultSize);
                             rows[count][1] = String.valueOf(map.get("\"Time\""));
                             rows[count][2] = String.valueOf(map.get("\"ID\""));
+
                             count++;
                             resultSize--;
                         }
