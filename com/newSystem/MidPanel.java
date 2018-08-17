@@ -241,7 +241,8 @@ public class MidPanel extends JPanel {
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         /////////////////////////////////////////////////////////////////////
         JScrollPane bincoindScrollPane = new JScrollPane(bincoindTextArea);
-        bincoindTextArea.setBackground(Color.GRAY);
+        bincoindTextArea.setBackground(Color.BLACK);
+        bincoindTextArea.setForeground(Color.green);
         bitcoindPanel.add(bincoindScrollPane, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
     }
 

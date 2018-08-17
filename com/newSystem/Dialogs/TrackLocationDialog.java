@@ -14,7 +14,7 @@ public class TrackLocationDialog extends JDialog {
     private DialogDefaultPanel upperPanel;
     private JScrollPane underPanel;
     public static DefaultTableModel trackLocationModel;
-    private JTable trackLocationTable;
+    public static JTable trackLocationTable;
 
     public TrackLocationDialog() {
         setTitle("Tracking Location");
@@ -44,5 +44,9 @@ public class TrackLocationDialog extends JDialog {
 
     public static DefaultTableModel getTrackLocationTableModel() {
         return trackLocationModel;
+    }
+
+    public static JTable getTrackLocationTable(){
+        return trackLocationTable;
     }
 }

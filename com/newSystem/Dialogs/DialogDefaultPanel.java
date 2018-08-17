@@ -16,14 +16,14 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.net.URL;
+import java.util.List;
 
 import static com.newSystem.MainFrame.bitcoinJSONRPCClient;
 
@@ -234,10 +234,10 @@ public class DialogDefaultPanel extends JPanel {
                     }
                 } else if (dialog == DIALOG.TRACKLOCATION) {
                     HashMap<String, Integer> map = new HashMap<String, Integer>();
+                    HashMap<String, List<String>> mapPID = new HashMap<String, List<String>>();
                     String filename = eachText[0].getText();
 
                     try {
-
                         BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\" + Settings.getUserNmae() + "\\AppData\\Roaming\\Bitcoin\\" + filename));
                         while (true) {
                             String pID = br.readLine();
@@ -247,15 +247,20 @@ public class DialogDefaultPanel extends JPanel {
                                 List<Map> track_prouct_Result = MainFrame.bitcoinJSONRPCClient.track_product(pID);
                                 if (track_prouct_Result.size() != 0) {
                                     String userID = track_prouct_Result.get(0).get("\"ID\"").toString();
+                                    List<String> tmp = new List<String>();
+                                    mapPID.put(userID, tmp);
                                     if (map.containsKey(userID)) {
                                         map.put(userID, map.get(userID) + 1);
+
+                                        //mapPID.get(userID).add(pID);
                                     } else {
                                         map.put(track_prouct_Result.get(0).get("\"ID\"").toString(), 1);
+                                        mapPID.get(userID).add(pID);
                                     }
                                 }
                             }
                         }
-                       br.close();
+                        br.close();
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -263,8 +268,8 @@ public class DialogDefaultPanel extends JPanel {
                     Iterator<String> itr = map.keySet().iterator();
                     String[] row = new String[3];
                     int count = 0;
-                    while(itr.hasNext()){
-                        String key = (String)itr.next();
+                    while (itr.hasNext()) {
+                        String key = (String) itr.next();
                         int value = map.get(key);
                         count++;
                         row[0] = String.valueOf(count);
@@ -272,6 +277,30 @@ public class DialogDefaultPanel extends JPanel {
                         row[2] = String.valueOf(value);
                         TrackLocationDialog.getTrackLocationTableModel().addRow(row);
                     }
+                    TrackLocationDialog.getTrackLocationTable().addMouseListener(new MouseListener() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            if(e.getClickCount() == 2){
+                                System.out.println("aljdf;ljaldfkj;lajf;lajslf;jk");
+                            }
+                        }
+
+                        @Override
+                        public void mousePressed(MouseEvent e) {
+                        }
+
+                        @Override
+                        public void mouseReleased(MouseEvent e) {
+                        }
+
+                        @Override
+                        public void mouseEntered(MouseEvent e) {
+                        }
+
+                        @Override
+                        public void mouseExited(MouseEvent e) {
+                        }
+                    });
                 }
             } else if (clicked == trackBtn) {
                 // table을 초기화 시켜주기 위해서
