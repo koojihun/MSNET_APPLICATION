@@ -9,6 +9,9 @@ import com.newSystem.MainFrame;
 import com.newSystem.MidPanel;
 import com.newSystem.Settings;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -230,15 +233,16 @@ public class DialogDefaultPanel extends JPanel {
                                 break;
                             } else {
                                 List<Map> track_prouct_Result = MainFrame.bitcoinJSONRPCClient.track_product(pID);
+                                ArrayList<String> tmp;
                                 if (track_prouct_Result.size() != 0) {
                                     String userID = track_prouct_Result.get(0).get("\"ID\"").toString();
-                                    // List<String> tmp = new List<String>();
-                                    // mapPID.put(userID, tmp);
                                     if (map.containsKey(userID)) {
                                         map.put(userID, map.get(userID) + 1);
-                                        //mapPID.get(userID).add(pID);
+                                        mapPID.get(userID).add(pID);
                                     } else {
                                         map.put(track_prouct_Result.get(0).get("\"ID\"").toString(), 1);
+                                        tmp = new ArrayList<>();
+                                        mapPID.put(userID, tmp);
                                         mapPID.get(userID).add(pID);
                                     }
                                 }
@@ -248,10 +252,15 @@ public class DialogDefaultPanel extends JPanel {
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
+                    //가운데정렬
+                    DefaultTableCellRenderer celAlignCenter = new DefaultTableCellRenderer();
+                    celAlignCenter.setHorizontalAlignment(JLabel.CENTER);
+
                     TrackLocationDialog.getTrackLocationTableModel().setNumRows(0);
                     Iterator<String> itr = map.keySet().iterator();
                     String[] row = new String[3];
                     int count = 0;
+
                     while (itr.hasNext()) {
                         String key = (String) itr.next();
                         int value = map.get(key);
@@ -259,13 +268,31 @@ public class DialogDefaultPanel extends JPanel {
                         row[0] = String.valueOf(count);
                         row[1] = key;
                         row[2] = String.valueOf(value);
+                        TrackLocationDialog.trackLocationTable.getColumnModel().getColumn(0).setCellRenderer(celAlignCenter);
+                        TrackLocationDialog.trackLocationTable.getColumnModel().getColumn(1).setCellRenderer(celAlignCenter);
+                        TrackLocationDialog.trackLocationTable.getColumnModel().getColumn(2).setCellRenderer(celAlignCenter);
                         TrackLocationDialog.getTrackLocationTableModel().addRow(row);
                     }
+
+
                     TrackLocationDialog.getTrackLocationTable().addMouseListener(new MouseListener() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
-                            if(e.getClickCount() == 2){
-                                System.out.println("");
+                            if (e.getClickCount() == 2) {
+
+                                int productIdx = TrackLocationDialog.getTrackLocationTable().getSelectedRow();
+                                String company = TrackLocationDialog.getTrackLocationTable().getValueAt(productIdx, 1).toString();
+
+                                new ProductListDialog();
+                                ProductListDialog.getUpperPanel().makeNonEmptyLine("Company", company, false);
+                                for (int i = 0; i < mapPID.get(company).size(); i++) {
+                                    String[] row = new String[2];
+                                    row[0] = (i + 1) + "";
+                                    row[1] = mapPID.get(company).get(i);
+                                    ProductListDialog.productListTable.getColumnModel().getColumn(0).setCellRenderer(celAlignCenter);
+                                    ProductListDialog.productListTable.getColumnModel().getColumn(1).setCellRenderer(celAlignCenter);
+                                    ProductListDialog.getProductListTableModel().addRow(row);
+                                }
                             }
                         }
 

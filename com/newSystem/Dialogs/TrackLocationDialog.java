@@ -31,10 +31,13 @@ public class TrackLocationDialog extends JDialog {
         String[] col = {"No", "Company", "Number of products"};
         trackLocationModel = new DefaultTableModel(col, 0);
         trackLocationTable = new JTable(trackLocationModel);
+        trackLocationTable.setRowSelectionAllowed(true);
+        trackLocationTable.setDefaultEditor(Object.class, null);
         trackLocationTable.getColumnModel().getColumn(0).setPreferredWidth(10);
         trackLocationTable.getColumnModel().getColumn(1).setPreferredWidth(100);
         trackLocationTable.getColumnModel().getColumn(2).setPreferredWidth(200);
         underPanel = new JScrollPane(trackLocationTable);
+
         mainPanel.add(upperPanel, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
         mainPanel.add(underPanel, new LinearConstraints().setWeight(5).setLinearSpace(LinearSpace.MATCH_PARENT));
 
