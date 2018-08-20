@@ -5,6 +5,7 @@ import com.mommoo.flat.layout.linear.Orientation;
 import com.mommoo.flat.layout.linear.constraints.LinearConstraints;
 import com.mommoo.flat.layout.linear.constraints.LinearSpace;
 import com.newSystem.Dialogs.AddressViewDialog;
+import com.newSystem.Dialogs.TransactionDialog;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -111,6 +112,7 @@ public class MidPanel extends JPanel {
         productTable = new JTable(productTableModel);
         productTable.setRowHeight(30);
         productTable.getTableHeader().setFont(Settings.Font19);
+        productTable.getTableHeader().setPreferredSize(new Dimension(0, 40));
         productTable.setFont(Settings.Font14);
         productTable.setRowSelectionAllowed(true);
         productTable.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -139,8 +141,9 @@ public class MidPanel extends JPanel {
         mempoolTable = new JTable(mempoolTableModel);
         mempoolTable.setRowHeight(30);
         mempoolTable.getTableHeader().setFont(Settings.Font19);
+        mempoolTable.getTableHeader().setPreferredSize(new Dimension(0, 40));
         mempoolTable.setFont(Settings.Font14);
-        mempoolTable.setDefaultEditor(Object.class, myCellEditor);
+        mempoolTable.setDefaultEditor(Object.class, null);
 
         JScrollPane list = new JScrollPane(mempoolTable);
         list.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
@@ -148,8 +151,10 @@ public class MidPanel extends JPanel {
         mempoolTable.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                String txID = (String) mempoolTable.getValueAt(mempoolTable.getSelectedRow(), 0);
-                //System.out.println(txID);
+                if (evt.getClickCount() == 2) {
+                    String txID = (String) mempoolTable.getValueAt(mempoolTable.getSelectedRow(), 0);
+                    new TransactionDialog(txID);
+                }
             }
         });
         mempoolPanel.add(list, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));

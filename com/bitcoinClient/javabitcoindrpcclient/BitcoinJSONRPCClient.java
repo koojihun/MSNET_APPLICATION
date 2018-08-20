@@ -2133,8 +2133,8 @@ public class BitcoinJSONRPCClient implements BitcoindRpcClient {
     }
 
     @Override
-    public Transaction get_transaction(String txId) {
-        return new TransactionWrapper((Map) query("get_transaction", txId, true));
+    public Transaction get_transaction(String txId, boolean watchOnly) {
+        return new TransactionWrapper((Map) query("get_transaction", txId, watchOnly));
     }
 
     @Override

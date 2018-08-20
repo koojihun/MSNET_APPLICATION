@@ -1552,7 +1552,7 @@ public interface BitcoindRpcClient {
    *  
    * @see <a href="https://bitcoin.org/en/developer-reference#gettransaction">gettransaction</a>
    */
-  Transaction get_transaction(String txId);
+  Transaction get_transaction(String txId, boolean watchOnly);
   
   /**
    * The gettxout RPC returns details about an unspent transaction output (UTXO).

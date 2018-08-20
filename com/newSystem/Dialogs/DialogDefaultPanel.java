@@ -1,6 +1,5 @@
 package com.newSystem.Dialogs;
 
-
 import com.mommoo.flat.layout.linear.LinearLayout;
 import com.mommoo.flat.layout.linear.Orientation;
 import com.mommoo.flat.layout.linear.constraints.LinearConstraints;
@@ -9,8 +8,6 @@ import com.newSystem.Bitcoins.Bitcoind;
 import com.newSystem.MainFrame;
 import com.newSystem.MidPanel;
 import com.newSystem.Settings;
-
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -21,11 +18,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.util.*;
 import java.net.URL;
 import java.util.List;
-
 import static com.newSystem.MainFrame.bitcoinJSONRPCClient;
 
 public class DialogDefaultPanel extends JPanel {
@@ -38,7 +33,6 @@ public class DialogDefaultPanel extends JPanel {
     public JTextField[] eachText;
     JButton okBtn;
     JButton cancelBtn;
-    JButton findBtn;
     JButton trackBtn;
     int lineCount;
     int padding;
@@ -89,18 +83,13 @@ public class DialogDefaultPanel extends JPanel {
         okBtn.setFocusPainted(false);
         okBtn.addActionListener(clickListener);
 
-        if (dialog != DIALOG.INFO && dialog != DIALOG.MINING && dialog != DIALOG.FIND && dialog != DIALOG.TRACK) {
+        if (dialog != DIALOG.INFO && dialog != DIALOG.MINING && dialog != DIALOG.FIND && dialog != DIALOG.TRACK && dialog != DIALOG.TXINFO) {
             targetLine.add(cancelBtn = new JButton("CANCEL"), new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.WRAP_CENTER_CONTENT));
             cancelBtn.setFont(Settings.Font14);
             cancelBtn.setFocusPainted(false);
             cancelBtn.addActionListener(clickListener);
         }
-
         add(targetLine, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
-    }
-
-    public void makeLabelLine(String explanation) {
-
     }
 
     public void makeTrackButtonLine() {
@@ -118,7 +107,7 @@ public class DialogDefaultPanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             JButton clicked = (JButton) e.getSource();
             // Info 와 Mining 창은 버튼이 1개이므로 눌리면 바로 종료.
-            if (clicked == cancelBtn || dialog == DIALOG.INFO || dialog == DIALOG.MINING)
+            if (clicked == cancelBtn || dialog == DIALOG.INFO || dialog == DIALOG.MINING || dialog == DIALOG.TXINFO)
                 // 해당 다이얼로그 종료.
                 SwingUtilities.getWindowAncestor(clicked).dispose();
             else if (clicked == okBtn) {
@@ -208,7 +197,6 @@ public class DialogDefaultPanel extends JPanel {
                     String companyName = eachText[1].getText();
                     if (companyName.length() == 0) {
                         JOptionPane.showMessageDialog(null, "Insert name of Company.", "Message", JOptionPane.WARNING_MESSAGE);
-
                     } else {
                         String url = "http://166.104.126.21:9999/?method=0&account=" + companyName + "&address=" + bitcoinJSONRPCClient.get_account_address("");
                         try {
@@ -220,11 +208,9 @@ public class DialogDefaultPanel extends JPanel {
                             con.setRequestProperty("Accept-Charset", "UTF-8");
                             con.setRequestProperty("Content-Type", "text/plain; charset=utf-8");
                             int responseCode = con.getResponseCode();
-                            BufferedReader in = new BufferedReader(
-                                    new InputStreamReader(con.getInputStream()));
+                            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
                             String inputLine;
                             StringBuffer response = new StringBuffer();
-
                             while ((inputLine = in.readLine()) != null) {
                                 response.append(inputLine);
                             }
@@ -232,6 +218,7 @@ public class DialogDefaultPanel extends JPanel {
                         } catch (IOException e1) {
                             e1.printStackTrace();
                         }
+                        SwingUtilities.getWindowAncestor(clicked).dispose();
                     }
                 } else if (dialog == DIALOG.TRACKLOCATION) {
                     HashMap<String, Integer> map = new HashMap<String, Integer>();
@@ -249,7 +236,6 @@ public class DialogDefaultPanel extends JPanel {
                                 ArrayList<String> tmp;
                                 if (track_prouct_Result.size() != 0) {
                                     String userID = track_prouct_Result.get(0).get("\"ID\"").toString();
-
                                     if (map.containsKey(userID)) {
                                         map.put(userID, map.get(userID) + 1);
                                         mapPID.get(userID).add(pID);
@@ -342,7 +328,6 @@ public class DialogDefaultPanel extends JPanel {
                         int resultSize = result.size();
                         int count = 0;
                         String[][] rows = new String[result.size()][3];
-
                         for (Map map : result) {
                             rows[count][0] = String.valueOf(resultSize);
                             rows[count][1] = String.valueOf(map.get("\"Time\""));
@@ -351,9 +336,8 @@ public class DialogDefaultPanel extends JPanel {
                             count++;
                             resultSize--;
                         }
-                        for (int i = result.size() - 1; i >= 0; i--) {
+                        for (int i = result.size() - 1; i >= 0; i--)
                             TrackDialog.getTrackTableModel().addRow(rows[i]);
-                        }
                     } catch (ClassCastException err) {
                         JOptionPane.showMessageDialog(null, "There is no product " + id, "Message", JOptionPane.WARNING_MESSAGE);
                     }
