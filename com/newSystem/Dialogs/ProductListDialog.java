@@ -8,6 +8,8 @@ import com.newSystem.Settings;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class ProductListDialog extends JDialog {
     private JPanel mainPanel;
@@ -25,7 +27,7 @@ public class ProductListDialog extends JDialog {
 
         mainPanel = new JPanel();
         mainPanel.setLayout(new LinearLayout(Orientation.VERTICAL, 0));
-        upperPanel = new DialogDefaultPanel(2, 20, DialogDefaultPanel.DIALOG.TRACK);
+        upperPanel = new DialogDefaultPanel(2, 20, DialogDefaultPanel.DIALOG.PRODUCTLIST);
 
         String[] col = {"No", "Product ID"};
         productListTableModel = new DefaultTableModel(col, 0);
@@ -33,6 +35,36 @@ public class ProductListDialog extends JDialog {
         productListTable.setDefaultEditor(Object.class, null);
         productListTable.getColumnModel().getColumn(0).setPreferredWidth(1);
         productListTable.getColumnModel().getColumn(1).setPreferredWidth(300);
+        productListTable.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 2){
+                    int productIdx = productListTable.getSelectedRow();
+                    String pid = productListTable.getValueAt(productIdx, 1).toString();
+                    new TrackDialog(pid, true);
+                }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
 
         underPanel = new JScrollPane(productListTable);
         mainPanel.add(upperPanel, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
@@ -43,6 +75,10 @@ public class ProductListDialog extends JDialog {
 
     public static DefaultTableModel getProductListTableModel() {
         return productListTableModel;
+    }
+
+    public static JTable getProductListTable() {
+        return productListTable;
     }
 
     public static DialogDefaultPanel getUpperPanel() {

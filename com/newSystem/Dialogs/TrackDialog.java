@@ -46,6 +46,37 @@ public class TrackDialog extends JDialog {
         add(mainPanel);
         setVisible(true);
     }
+    public TrackDialog(String id, boolean auto) {
+        setTitle("Tracking Product");
+        setLocation(200, 200);
+        setSize(500, 500);
+        // Icon 설정
+        setIconImage(Settings.icon);
+
+        mainPanel = new JPanel();
+        mainPanel.setLayout(new LinearLayout(Orientation.VERTICAL, 0));
+
+        upperPanel = new DialogDefaultPanel(2, 20, DialogDefaultPanel.DIALOG.TRACK);
+        upperPanel.makeNonEmptyLine("Product ID", id, true);
+        upperPanel.makeTrackButtonLine();
+
+        String[] col = {"No", "Time", "Receiver"};
+        trackTableModel = new DefaultTableModel(col, 0);
+        trackTable = new JTable(trackTableModel);
+        trackTable.getColumnModel().getColumn(0).setPreferredWidth(10);
+        trackTable.getColumnModel().getColumn(1).setPreferredWidth(100);
+        trackTable.getColumnModel().getColumn(2).setPreferredWidth(200);
+        trackTable.setDefaultEditor(Object.class, new MyCellEditor());
+        underPanel = new JScrollPane(trackTable);
+        mainPanel.add(upperPanel, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
+        mainPanel.add(underPanel, new LinearConstraints().setWeight(5).setLinearSpace(LinearSpace.MATCH_PARENT));
+
+        add(mainPanel);
+        setVisible(true);
+
+        if (auto)
+            upperPanel.trackBtn.doClick();
+    }
     public static DefaultTableModel getTrackTableModel() {
         return trackTableModel;
     }

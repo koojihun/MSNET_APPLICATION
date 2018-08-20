@@ -30,7 +30,7 @@ import static com.newSystem.MainFrame.bitcoinJSONRPCClient;
 
 public class DialogDefaultPanel extends JPanel {
     public enum DIALOG {
-        ADDPRODUCT, ADDMANYPRODUCT, ADDADDRESS, ADDPEER, INFO, MINING, FIND, TRACK, IMPORTADDRESS, TXINFO, SAVEADDRESS, SENDADDRESSTOSERVER, TRACKLOCATION
+        ADDPRODUCT, ADDMANYPRODUCT, ADDADDRESS, ADDPEER, INFO, MINING, FIND, TRACK, IMPORTADDRESS, TXINFO, SAVEADDRESS, SENDADDRESSTOSERVER, TRACKLOCATION, PRODUCTLIST
     }
 
     public JPanel[] eachLine; // if total = 4 Lines, 4th line will contain ok & cancel buttons.
@@ -287,7 +287,6 @@ public class DialogDefaultPanel extends JPanel {
                         TrackLocationDialog.trackLocationTable.getColumnModel().getColumn(2).setCellRenderer(celAlignCenter);
                         TrackLocationDialog.getTrackLocationTableModel().addRow(row);
                     }
-
 
                     TrackLocationDialog.getTrackLocationTable().addMouseListener(new MouseListener() {
                         @Override
