@@ -24,7 +24,7 @@ public class MiningDialog extends JDialog {
         setSize(500, 300);
         // Icon 설정
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("icon.png")));
-        mainPanel = new DialogDefaultPanel(5, 20, DialogDefaultPanel.DIALOG.MINING);
+        mainPanel = new DialogDefaultPanel(20, DialogDefaultPanel.DIALOG.MINING);
 
         ClickListener miningClick = new ClickListener();
         JPanel buttonPanel = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10));
@@ -62,7 +62,7 @@ public class MiningDialog extends JDialog {
                     dispose();
                 }
             } else if (clicked == autoMining) {
-                String seconds = mainPanel.eachText[0].getText();
+                String seconds = mainPanel.eachText.get(0).getText();
                 // Tx size 또는 Seconds가 빈칸일 때 경고 메시지.
                 if (seconds.equals("")) {
                     JOptionPane.showMessageDialog(null, "Mining block every 100 seconds", "Message", JOptionPane.INFORMATION_MESSAGE);

@@ -29,7 +29,7 @@ public class TrackDialog extends JDialog {
         mainPanel = new JPanel();
         mainPanel.setLayout(new LinearLayout(Orientation.VERTICAL, 0));
 
-        upperPanel = new DialogDefaultPanel(2, 20, DialogDefaultPanel.DIALOG.TRACK);
+        upperPanel = new DialogDefaultPanel(20, DialogDefaultPanel.DIALOG.TRACK);
         upperPanel.makeNonEmptyLine("Product ID", null, true);
         upperPanel.makeTrackButtonLine();
 
@@ -65,7 +65,7 @@ public class TrackDialog extends JDialog {
         mainPanel = new JPanel();
         mainPanel.setLayout(new LinearLayout(Orientation.VERTICAL, 0));
 
-        upperPanel = new DialogDefaultPanel(2, 20, DialogDefaultPanel.DIALOG.TRACK);
+        upperPanel = new DialogDefaultPanel(20, DialogDefaultPanel.DIALOG.TRACK);
         upperPanel.makeNonEmptyLine("Product ID", id, true);
         upperPanel.makeTrackButtonLine();
 

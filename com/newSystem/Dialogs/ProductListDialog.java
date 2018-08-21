@@ -27,7 +27,7 @@ public class ProductListDialog extends JDialog {
 
         mainPanel = new JPanel();
         mainPanel.setLayout(new LinearLayout(Orientation.VERTICAL, 0));
-        upperPanel = new DialogDefaultPanel(2, 20, DialogDefaultPanel.DIALOG.PRODUCTLIST);
+        upperPanel = new DialogDefaultPanel(20, DialogDefaultPanel.DIALOG.PRODUCTLIST);
 
         String[] col = {"No", "Product ID"};
         productListTableModel = new DefaultTableModel(col, 0);

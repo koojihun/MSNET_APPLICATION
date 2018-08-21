@@ -4,15 +4,20 @@ import java.awt.*;
 import java.io.*;
 
 public class Settings {
+
     static private String userNmae;
     static private String rpcUser;
     static private String rpcPassword;
-    private Font font;
+    final public String COMPANY_NAME;
+    final public String ADDRESS;
     static public Font Font14;
     static public Font Font18;
     static public Font Font19;
     static public Image icon;
     public Settings() {
+        // TODO:
+        COMPANY_NAME = "";
+        ADDRESS = "";
         ////////////////////////////////////////////////////////////////
         userNmae = System.getProperty("user.name");
         ////////////////////////////////////////////////////////////////

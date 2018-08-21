@@ -7,6 +7,8 @@ import com.mommoo.flat.layout.linear.constraints.LinearConstraints;
 import com.mommoo.flat.layout.linear.constraints.LinearSpace;
 import com.newSystem.Bitcoins.Bitcoind;
 import com.bitcoinClient.javabitcoindrpcclient.BitcoinJSONRPCClient;
+import com.newSystem.Dialogs.LoginForm;
+import com.newSystem.Dialogs.SignUpForm;
 
 import javax.swing.*;
 import java.net.MalformedURLException;
@@ -67,7 +69,8 @@ public class MainFrame extends JFrame {
     public static void main(String[] args) throws Exception {
         UIManager.setLookAndFeel(new WebLookAndFeel());
         new Settings();
-
+        new LoginForm();
+        /*
         MainFrame mainFrame = new MainFrame();
 
         // bincoind 실행 쓰레드
@@ -75,6 +78,7 @@ public class MainFrame extends JFrame {
 
         // bincoind로 rpc 명령을 전달하는 서버를 돌리는 쓰레드.
         new bitcoinServer().start();
+        */
     }
     /*****************************************************/
 }

@@ -83,7 +83,7 @@ public class ImportDialog extends JDialog {
             setSize(500, 250);
             // Icon 설정
             setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getClassLoader().getResource("icon.png")));
-            DialogDefaultPanel mainPanel = new DialogDefaultPanel(4, 20, DialogDefaultPanel.DIALOG.IMPORTADDRESS);
+            DialogDefaultPanel mainPanel = new DialogDefaultPanel(20, DialogDefaultPanel.DIALOG.IMPORTADDRESS);
             ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
             JLabel explaination = new JLabel("Import an Address as account");
             explaination.setHorizontalAlignment(SwingConstants.CENTER);

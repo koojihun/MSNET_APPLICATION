@@ -157,7 +157,7 @@ public class AddressDialog extends JDialog {
             setTitle("Add Address");
             setLocation(200, 200);
             setSize(500, 300);
-            DialogDefaultPanel panel = new DialogDefaultPanel(4, 20, DialogDefaultPanel.DIALOG.SAVEADDRESS);
+            DialogDefaultPanel panel = new DialogDefaultPanel(20, DialogDefaultPanel.DIALOG.SAVEADDRESS);
             panel.makeEmptyLine();
             panel.makeNonEmptyLine("Name ", null, true);
             panel.makeNonEmptyLine("Address ", null, true);

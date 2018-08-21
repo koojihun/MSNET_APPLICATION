@@ -26,7 +26,7 @@ public class TransactionDialog extends JDialog {
         String receiveAccount = (String) receive.get("account");
         Map product = (Map) receive.get("product received");
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        DialogDefaultPanel panel = new DialogDefaultPanel(12, 10, DialogDefaultPanel.DIALOG.TXINFO);
+        DialogDefaultPanel panel = new DialogDefaultPanel(10, DialogDefaultPanel.DIALOG.TXINFO);
         panel.makeNonEmptyLine("Transaction ID", transaction.txId(), false);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd, hh:mm:ss a");
         panel.makeNonEmptyLine("Send Time", sdf.format(transaction.time()), false);

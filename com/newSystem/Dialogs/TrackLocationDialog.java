@@ -25,7 +25,7 @@ public class TrackLocationDialog extends JDialog {
         mainPanel = new JPanel();
         mainPanel.setLayout(new LinearLayout(Orientation.VERTICAL, 0));
 
-        upperPanel = new DialogDefaultPanel(2, 20, DialogDefaultPanel.DIALOG.TRACKLOCATION);
+        upperPanel = new DialogDefaultPanel(20, DialogDefaultPanel.DIALOG.TRACKLOCATION);
         upperPanel.makeNonEmptyLine("File name", null, true);
         upperPanel.makeButtonLine();
         String[] col = {"No", "Company", "Number of products"};

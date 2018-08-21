@@ -25,41 +25,77 @@ import static com.newSystem.MainFrame.bitcoinJSONRPCClient;
 
 public class DialogDefaultPanel extends JPanel {
     public enum DIALOG {
-        ADDPRODUCT, ADDMANYPRODUCT, ADDADDRESS, ADDPEER, INFO, MINING, FIND, TRACK, IMPORTADDRESS, TXINFO, SAVEADDRESS, SENDADDRESSTOSERVER, TRACKLOCATION, PRODUCTLIST
+        ADDPRODUCT, ADDMANYPRODUCT, ADDADDRESS, ADDPEER, INFO, MINING, FIND, TRACK, IMPORTADDRESS, TXINFO, SAVEADDRESS,
+        SENDADDRESSTOSERVER, TRACKLOCATION, PRODUCTLIST, SIGNUP
     }
 
-    public JPanel[] eachLine; // if total = 4 Lines, 4th line will contain ok & cancel buttons.
-    public JLabel[] eachLabel;
-    public JTextField[] eachText;
+    public ArrayList<JPanel> eachLine; // if total = 4 Lines, 4th line will contain ok & cancel buttons.
+    public ArrayList<JLabel> eachLabel;
+    public ArrayList<JTextField> eachText;
     JButton okBtn;
     JButton cancelBtn;
     JButton trackBtn;
-    int lineCount;
     int padding;
     DIALOG dialog;
     ClickListener clickListener;
 
-    DialogDefaultPanel(int max, int padding, DIALOG dialog) {
-        lineCount = 0;
+    DialogDefaultPanel(int padding, DIALOG dialog) {
         this.padding = padding;
-        eachLine = new JPanel[max];
-        eachLabel = new JLabel[max];
-        eachText = new JTextField[max];
+        eachLine = new ArrayList<JPanel>();
+        eachLabel = new ArrayList<JLabel>();
+        eachText = new ArrayList<JTextField>();
         this.dialog = dialog;
         setLayout(new LinearLayout(Orientation.VERTICAL, 10));
         clickListener = new ClickListener();
     }
 
     public void makeEmptyLine() {
-        JPanel targetLine = eachLine[lineCount++] = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10));
+        JPanel targetLine;
+        eachLine.add(targetLine = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10)));
         targetLine.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
         add(targetLine, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
     }
 
+    public void makePasswordLine(String l) {
+        JPanel targetLine;
+        eachLine.add(targetLine = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10)));
+        JLabel targetLabel;
+        eachLabel.add(targetLabel = new JLabel(l));
+
+        JPasswordField targetText = new JPasswordField();
+        eachText.add(targetText);
+
+        targetLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        targetLabel.setVerticalAlignment(SwingConstants.CENTER);
+        targetLabel.setFont(Settings.Font14);
+        targetText.setFont(Settings.Font14);
+
+        targetLine.add(targetLabel, new LinearConstraints().setWeight(4).setLinearSpace(LinearSpace.WRAP_CENTER_CONTENT));
+        targetLine.add(targetText, new LinearConstraints().setWeight(6).setLinearSpace(LinearSpace.WRAP_CENTER_CONTENT));
+        targetLine.setBorder(BorderFactory.createEmptyBorder(padding + 10, padding, padding, padding));
+        add(targetLine, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
+    }
+    public void makeExplainLine(String s) {
+        JPanel targetLine;
+        JLabel targetLabel;
+        eachLine.add(targetLine = new JPanel(new LinearLayout(Orientation.VERTICAL, 10)));
+        eachLabel.add(targetLabel = new JLabel(s));
+        eachText.add(new JTextField());
+        targetLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        targetLabel.setVerticalAlignment(SwingConstants.CENTER);
+        targetLabel.setFont(Settings.Font18);
+        targetLine.add(targetLabel, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.WRAP_CENTER_CONTENT));
+        targetLine.setBorder(BorderFactory.createEmptyBorder(padding + 10, padding, padding, padding));
+        add(targetLine, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
+    }
     public void makeNonEmptyLine(String l, String t, boolean textFieldChange) {
-        JPanel targetLine = eachLine[lineCount] = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10));
-        JLabel targetLabel = eachLabel[lineCount] = new JLabel(l);
-        JTextField targetText = eachText[lineCount++] = new JTextField();
+        JPanel targetLine;
+        eachLine.add(targetLine = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10)));
+        JLabel targetLabel;
+        eachLabel.add(targetLabel = new JLabel(l));
+        JTextField targetText;
+        eachText.add(targetText = new JTextField());
+
         targetLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         targetLabel.setVerticalAlignment(SwingConstants.CENTER);
         targetLabel.setFont(Settings.Font14);
@@ -76,7 +112,9 @@ public class DialogDefaultPanel extends JPanel {
     }
 
     public void makeButtonLine() {
-        JPanel targetLine = eachLine[lineCount++] = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10));
+        JPanel targetLine;
+        eachLine.add(targetLine = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10)));
+
         targetLine.setBorder(BorderFactory.createEmptyBorder(padding, padding, padding, padding));
         targetLine.add(okBtn = new JButton("OK"), new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.WRAP_CENTER_CONTENT));
         okBtn.setFont(Settings.Font14);
@@ -93,7 +131,8 @@ public class DialogDefaultPanel extends JPanel {
     }
 
     public void makeTrackButtonLine() {
-        JPanel targetLine = eachLine[lineCount++] = new JPanel(new LinearLayout(Orientation.HORIZONTAL));
+        JPanel targetLine;
+        eachLine.add(targetLine = new JPanel(new LinearLayout(Orientation.HORIZONTAL, 10)));
         targetLine.setBorder(BorderFactory.createEmptyBorder(0, padding, 0, padding));
         targetLine.add(trackBtn = new JButton("Track"), new LinearConstraints().setWeight(4).setLinearSpace(LinearSpace.WRAP_CENTER_CONTENT));
         trackBtn.setFont(Settings.Font14);
@@ -113,14 +152,14 @@ public class DialogDefaultPanel extends JPanel {
             else if (clicked == okBtn) {
                 if (dialog == DIALOG.ADDADDRESS) {
                     // add 창에서 address 추가인 경우 첫번째라인은 비어 있음.
-                    String account = eachText[1].getText();
+                    String account = eachText.get(1).getText();
                     bitcoinJSONRPCClient.get_new_address(account);
                     SwingUtilities.getWindowAncestor(clicked).dispose();
                 } else if (dialog == DIALOG.ADDPRODUCT) {
                     // add 창에서 product 추가인 경우.
-                    String prodDate = eachText[0].getText();
-                    String expDate = eachText[1].getText();
-                    String count = eachText[2].getText();
+                    String prodDate = eachText.get(0).getText();
+                    String expDate = eachText.get(1).getText();
+                    String count = eachText.get(2).getText();
                     // Product info가 빈칸일 때 경고 메시지.
                     if (prodDate.equals("") || expDate.equals("") || count.equals("")) {
                         JOptionPane.showMessageDialog(null,
@@ -144,8 +183,8 @@ public class DialogDefaultPanel extends JPanel {
                         SwingUtilities.getWindowAncestor(clicked).dispose();
                     }
                 } else if (dialog == DIALOG.IMPORTADDRESS) {
-                    String account = eachText[0].getText();
-                    String address = eachText[1].getText();
+                    String account = eachText.get(0).getText();
+                    String address = eachText.get(1).getText();
                     // account 또는 address가 빈칸일 때 경고 메시지.
                     if (account.equals("") || address.equals("")) {
                         JOptionPane.showMessageDialog(null, "Insert Account and Address.", "Message", JOptionPane.WARNING_MESSAGE);
@@ -156,7 +195,7 @@ public class DialogDefaultPanel extends JPanel {
                     }
                 } else if (dialog == DIALOG.ADDPEER) {
                     // 아무것도 입력하지 않았을 때 경고 메시지.
-                    if (eachText[1].getText().equals("")) {
+                    if (eachText.get(1).getText().equals("")) {
                         JOptionPane.showMessageDialog(null, "Insert IP address.", "Message", JOptionPane.WARNING_MESSAGE);
                     } else {
                         try {
@@ -167,7 +206,7 @@ public class DialogDefaultPanel extends JPanel {
                             BufferedWriter fw = new BufferedWriter(new FileWriter(fileName, true));
                             // 파일안에 문자열 쓰기
                             fw.newLine();
-                            fw.write("addnode=" + eachText[1].getText());
+                            fw.write("addnode=" + eachText.get(1).getText());
                             fw.newLine();
                             fw.flush();
                             // 객체 닫기
@@ -186,15 +225,15 @@ public class DialogDefaultPanel extends JPanel {
                         }
                     }
                 } else if (dialog == DIALOG.SAVEADDRESS) {
-                    String name = eachText[1].getText();
-                    String address = eachText[2].getText();
+                    String name = eachText.get(1).getText();
+                    String address = eachText.get(2).getText();
                     if (name.length() == 0 || address.length() == 0)
                         return;
                     String[] addRow = {name, address};
                     AddressDialog.savedAddressTableModel.addRow(addRow);
                     SwingUtilities.getWindowAncestor(clicked).dispose();
                 } else if (dialog == DIALOG.SENDADDRESSTOSERVER) {
-                    String companyName = eachText[1].getText();
+                    String companyName = eachText.get(1).getText();
                     if (companyName.length() == 0) {
                         JOptionPane.showMessageDialog(null, "Insert name of Company.", "Message", JOptionPane.WARNING_MESSAGE);
                     } else {
@@ -223,7 +262,7 @@ public class DialogDefaultPanel extends JPanel {
                 } else if (dialog == DIALOG.TRACKLOCATION) {
                     HashMap<String, Integer> map = new HashMap<String, Integer>();
                     HashMap<String, List<String>> mapPID = new HashMap<String, List<String>>();
-                    String filename = eachText[0].getText();
+                    String filename = eachText.get(0).getText();
 
                     try {
                         BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\" + Settings.getUserNmae() + "\\AppData\\Roaming\\Bitcoin\\" + filename));
@@ -318,7 +357,7 @@ public class DialogDefaultPanel extends JPanel {
                 for (int i = rowCount - 1; i >= 0; i--) {
                     TrackDialog.getTrackTableModel().removeRow(i);
                 }
-                String id = eachText[0].getText();
+                String id = eachText.get(0).getText();
                 // Product ID를 빈칸으로 뒀을 때 경고 메시지.
                 if (id.equals("")) {
                     JOptionPane.showMessageDialog(null, "Insert Product ID.", "Message", JOptionPane.WARNING_MESSAGE);

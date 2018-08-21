@@ -30,25 +30,25 @@ public class AddDialog extends JDialog {
         JTabbedPane tabbedPane = new JTabbedPane();
         mainPanel.add(tabbedPane, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
 
-        productPanel = new DialogDefaultPanel(4, 20, DialogDefaultPanel.DIALOG.ADDPRODUCT);
+        productPanel = new DialogDefaultPanel(20, DialogDefaultPanel.DIALOG.ADDPRODUCT);
         productPanel.makeNonEmptyLine("Production date ", null, true);
         productPanel.makeNonEmptyLine("Expiration date ", null, true);
         productPanel.makeNonEmptyLine("Count ", null, true);
         productPanel.makeButtonLine();
 
-        addressPanel = new DialogDefaultPanel(4, 20, DialogDefaultPanel.DIALOG.ADDADDRESS);
+        addressPanel = new DialogDefaultPanel(20, DialogDefaultPanel.DIALOG.ADDADDRESS);
         addressPanel.makeEmptyLine();
         addressPanel.makeNonEmptyLine("Account ", null, true);
         addressPanel.makeEmptyLine();
         addressPanel.makeButtonLine();
 
-        peerPanel = new DialogDefaultPanel(4, 20, DialogDefaultPanel.DIALOG.ADDPEER);
+        peerPanel = new DialogDefaultPanel(20, DialogDefaultPanel.DIALOG.ADDPEER);
         peerPanel.makeEmptyLine();
         peerPanel.makeNonEmptyLine("Peer IP ", null, true);
         peerPanel.makeEmptyLine();
         peerPanel.makeButtonLine();
 
-        sendAddressToServerPanel = new DialogDefaultPanel(4, 20, DialogDefaultPanel.DIALOG.SENDADDRESSTOSERVER);
+        sendAddressToServerPanel = new DialogDefaultPanel(20, DialogDefaultPanel.DIALOG.SENDADDRESSTOSERVER);
         sendAddressToServerPanel.makeEmptyLine();
         sendAddressToServerPanel.makeNonEmptyLine("Company name", null, true);
         sendAddressToServerPanel.makeEmptyLine();
