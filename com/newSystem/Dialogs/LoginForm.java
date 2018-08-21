@@ -71,8 +71,13 @@ public class LoginForm extends JDialog {
     class clickListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == SignUpBtn)
-                new SignUpForm();
+            if (e.getSource() == SignUpBtn) {
+                try {
+                    Runtime.getRuntime().exec("cmd /c start http://google.com/");
+                } catch (Exception Ex) {
+                    Ex.printStackTrace();
+                }
+            }
             else if (e.getSource() == loginBtn) {
                 String companyName = mainPanel.eachText.get(1).getText();
                 String password = mainPanel.eachText.get(2).getText();
