@@ -235,12 +235,12 @@ public class DialogDefaultPanel extends JPanel {
                                 List<Map> track_prouct_Result = MainFrame.bitcoinJSONRPCClient.track_product(pID);
                                 ArrayList<String> tmp;
                                 if (track_prouct_Result.size() != 0) {
-                                    String userID = track_prouct_Result.get(0).get("\"ID\"").toString();
+                                    String userID = track_prouct_Result.get(0).get("Where").toString();
                                     if (map.containsKey(userID)) {
                                         map.put(userID, map.get(userID) + 1);
                                         mapPID.get(userID).add(pID);
                                     } else {
-                                        map.put(track_prouct_Result.get(0).get("\"ID\"").toString(), 1);
+                                        map.put(track_prouct_Result.get(0).get("Where").toString(), 1);
                                         tmp = new ArrayList<>();
                                         mapPID.put(userID, tmp);
                                         mapPID.get(userID).add(pID);
@@ -331,7 +331,9 @@ public class DialogDefaultPanel extends JPanel {
                         for (Map map : result) {
                             rows[count][0] = String.valueOf(resultSize);
                             rows[count][1] = String.valueOf(map.get("Where"));
-                            rows[count][2] = String.valueOf(map.get("Time"));
+                            String time_tmp = String.valueOf(map.get("Time"));
+                            String time = time_tmp.substring(0,4) + "-" + time_tmp.substring(4, 6) + "-" + time_tmp.substring(6, 8) + " " + time_tmp.substring(9, 11) + ":" + time_tmp.substring(11, 13) + ":" + time_tmp.substring(13, 15);
+                            rows[count][2] = time;
 
                             count++;
                             resultSize--;

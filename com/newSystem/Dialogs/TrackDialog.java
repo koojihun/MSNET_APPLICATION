@@ -7,6 +7,7 @@ import com.mommoo.flat.layout.linear.constraints.LinearSpace;
 import com.newSystem.Settings;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
@@ -35,6 +36,14 @@ public class TrackDialog extends JDialog {
         String[] col = {"No", "Receiver","Time"};
         trackTableModel = new DefaultTableModel(col, 0);
         trackTable = new JTable(trackTableModel);
+
+        //가운데정렬
+        DefaultTableCellRenderer celAlignCenter = new DefaultTableCellRenderer();
+        celAlignCenter.setHorizontalAlignment(JLabel.CENTER);
+        trackTable.getColumnModel().getColumn(0).setCellRenderer(celAlignCenter);
+        trackTable.getColumnModel().getColumn(1).setCellRenderer(celAlignCenter);
+        trackTable.getColumnModel().getColumn(2).setCellRenderer(celAlignCenter);
+
         trackTable.getColumnModel().getColumn(0).setPreferredWidth(10);
         trackTable.getColumnModel().getColumn(1).setPreferredWidth(100);
         trackTable.getColumnModel().getColumn(2).setPreferredWidth(200);
@@ -60,9 +69,18 @@ public class TrackDialog extends JDialog {
         upperPanel.makeNonEmptyLine("Product ID", id, true);
         upperPanel.makeTrackButtonLine();
 
+
         String[] col = {"No", "Receiver", "Time"};
         trackTableModel = new DefaultTableModel(col, 0);
         trackTable = new JTable(trackTableModel);
+
+        //가운데정렬
+        DefaultTableCellRenderer celAlignCenter = new DefaultTableCellRenderer();
+        celAlignCenter.setHorizontalAlignment(JLabel.CENTER);
+        trackTable.getColumnModel().getColumn(0).setCellRenderer(celAlignCenter);
+        trackTable.getColumnModel().getColumn(1).setCellRenderer(celAlignCenter);
+        trackTable.getColumnModel().getColumn(2).setCellRenderer(celAlignCenter);
+
         trackTable.getColumnModel().getColumn(0).setPreferredWidth(10);
         trackTable.getColumnModel().getColumn(1).setPreferredWidth(100);
         trackTable.getColumnModel().getColumn(2).setPreferredWidth(200);
