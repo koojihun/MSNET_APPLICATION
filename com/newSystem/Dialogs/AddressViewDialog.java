@@ -89,7 +89,6 @@ public class AddressViewDialog extends JDialog {
                 if (savedAddressTable.getSelectedRow() == -1)
                     return;
                 String address = savedAddressTable.getValueAt(savedAddressTable.getSelectedRow(), 1).toString();
-
                 if (many)
                     MainFrame.bitcoinJSONRPCClient.send_many(address, ids);
                 else

@@ -303,14 +303,15 @@ public class MidPanel extends JPanel {
                         new AddressViewDialog(products, true);
                     }
                 } else {
-                    // 단일 전송.
                     if (selectedRowsIndex.length == 1) {
+                        // 단일 전송.
                         String id = productTableModel.getValueAt(selectedRowsIndex[0], 1).toString();
                         address = addressTextField.getText();
                         // 새로 만들어진 send_to_address는 product ID만 있으면 됨.
                         MainFrame.bitcoinJSONRPCClient.send_to_address(address, id);
-                        // 다중 전송.
+
                     } else {
+                        // 다중 전송.
                         String products = "";
                         for (int i = 0; i < selectedRowsIndex.length - 1; i++) {
                             products = products + productTableModel.getValueAt(selectedRowsIndex[i], 1).toString() + "/";

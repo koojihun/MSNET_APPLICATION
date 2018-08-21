@@ -8,10 +8,12 @@ import com.sun.net.httpserver.HttpServer;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class bitcoinServer extends Thread {
+    ArrayList<Peer> peerData;
     public void run() {
         try {
             HttpServer httpServer = HttpServer.create(new InetSocketAddress(9999), 0);
@@ -32,11 +34,14 @@ public class bitcoinServer extends Thread {
             String pid;
             String account;
             String address;
+            String ip;
             switch (Integer.valueOf(method)) {
                 case 0:
                     // method:0 --> import address request.
+                    ip = httpExchange.getRemoteAddress().toString();
                     account = params.get("account");
                     address = params.get("address");
+                    peerData.add(new Peer(ip, account, address));
                     MainFrame.bitcoinJSONRPCClient.importAddress(address, account, true);
                     break;
                 case 1:

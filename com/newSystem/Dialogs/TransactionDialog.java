@@ -36,8 +36,6 @@ public class TransactionDialog extends JDialog {
         panel.makeNonEmptyLine("Receiver Account", receiveAccount, false);
         panel.makeNonEmptyLine("Receiver Address", receiveAddress, false);
         panel.makeNonEmptyLine("Product Id", product.get("PID").toString(), false);
-        panel.makeNonEmptyLine("Product Country Code", product.get("countryCode").toString(), false);
-        panel.makeNonEmptyLine("Product Zip Code", product.get("zipCode").toString(), false);
         panel.makeButtonLine();
         //////////////////////////////////////////////////////////////////////////////////////////////////////////////
         add(panel);
