@@ -1577,11 +1577,11 @@ public interface BitcoindRpcClient {
 
   /**
    * For MSNet - Added by Juhan
-   * @param countryCode - product country code
-   * @param zipCode - product zip code
+   * @param prodDate - production date
+   * @param expDate - expiration date
    * Must be called before set_generate
    */
-  String gen_new_product(String countryCode, String zipCode);
+  String gen_new_product(String prodDate, String expDate);
   boolean find_product(String id, long countryCode, long zipCode);
   /**
    * For MSNet - Added by Juhan

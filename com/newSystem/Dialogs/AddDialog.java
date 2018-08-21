@@ -31,8 +31,8 @@ public class AddDialog extends JDialog {
         mainPanel.add(tabbedPane, new LinearConstraints().setWeight(1).setLinearSpace(LinearSpace.MATCH_PARENT));
 
         productPanel = new DialogDefaultPanel(4, 20, DialogDefaultPanel.DIALOG.ADDPRODUCT);
-        productPanel.makeNonEmptyLine("Country Code ", null, true);
-        productPanel.makeNonEmptyLine("Zip Code ", null, true);
+        productPanel.makeNonEmptyLine("Production date ", null, true);
+        productPanel.makeNonEmptyLine("Expiration date ", null, true);
         productPanel.makeNonEmptyLine("Count ", null, true);
         productPanel.makeButtonLine();
 

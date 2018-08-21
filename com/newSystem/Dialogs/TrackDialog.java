@@ -32,7 +32,7 @@ public class TrackDialog extends JDialog {
         upperPanel.makeNonEmptyLine("Product ID", null, true);
         upperPanel.makeTrackButtonLine();
 
-        String[] col = {"No", "Time", "Receiver"};
+        String[] col = {"No", "Receiver","Time"};
         trackTableModel = new DefaultTableModel(col, 0);
         trackTable = new JTable(trackTableModel);
         trackTable.getColumnModel().getColumn(0).setPreferredWidth(10);
@@ -60,7 +60,7 @@ public class TrackDialog extends JDialog {
         upperPanel.makeNonEmptyLine("Product ID", id, true);
         upperPanel.makeTrackButtonLine();
 
-        String[] col = {"No", "Time", "Receiver"};
+        String[] col = {"No", "Receiver", "Time"};
         trackTableModel = new DefaultTableModel(col, 0);
         trackTable = new JTable(trackTableModel);
         trackTable.getColumnModel().getColumn(0).setPreferredWidth(10);

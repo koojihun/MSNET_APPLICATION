@@ -105,8 +105,8 @@ public class MidPanel extends JPanel {
         String[] col = new String[4];
         col[0] = "No";
         col[1] = "ID";
-        col[2] = "Country Code";
-        col[3] = "Zip Code";
+        col[2] = "Production Date";
+        col[3] = "Expiration Date";
 
         productTableModel = new DefaultTableModel(col, 0);
         productTable = new JTable(productTableModel);
@@ -264,8 +264,8 @@ public class MidPanel extends JPanel {
             String[] row = {
                     String.valueOf(count),
                     String.valueOf(map.get("PID")),
-                    String.valueOf(map.get("countryCode")),
-                    String.valueOf(map.get("zipCode")),
+                    String.valueOf(map.get("production date")),
+                    String.valueOf(map.get("expiration date")),
             };
             productTableModel.addRow(row);
         }

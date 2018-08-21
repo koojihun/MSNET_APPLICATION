@@ -118,23 +118,23 @@ public class DialogDefaultPanel extends JPanel {
                     SwingUtilities.getWindowAncestor(clicked).dispose();
                 } else if (dialog == DIALOG.ADDPRODUCT) {
                     // add 창에서 product 추가인 경우.
-                    String cc = eachText[0].getText();
-                    String zc = eachText[1].getText();
+                    String prodDate = eachText[0].getText();
+                    String expDate = eachText[1].getText();
                     String count = eachText[2].getText();
                     // Product info가 빈칸일 때 경고 메시지.
-                    if (cc.equals("") || zc.equals("") || count.equals("")) {
+                    if (prodDate.equals("") || expDate.equals("") || count.equals("")) {
                         JOptionPane.showMessageDialog(null,
                                 "Insert product information.",
                                 "Message", JOptionPane.WARNING_MESSAGE);
-                    } else if (cc.length() > 6 || zc.length() > 10) {
+                    } else if (prodDate.length() != 15 || expDate.length() != 15) {
                         JOptionPane.showMessageDialog(null,
-                                "Too long Country Code & Zip Code.",
+                                "Please match the format(ex 20180821T101621).",
                                 "Message", JOptionPane.WARNING_MESSAGE);
                     } else {
                         try {
                             FileWriter fw = new FileWriter("C:\\Users\\" + Settings.getUserNmae() + "\\AppData\\Roaming\\Bitcoin\\ProductList.txt", true);
                             for (int cnt = 0; cnt < Integer.valueOf(count); cnt++) {
-                                String tmpPID = bitcoinJSONRPCClient.gen_new_product(cc, zc);
+                                String tmpPID = bitcoinJSONRPCClient.gen_new_product(prodDate, expDate);
                                 fw.write(tmpPID + "\r\n");
                             }
                             fw.close();
@@ -330,8 +330,8 @@ public class DialogDefaultPanel extends JPanel {
                         String[][] rows = new String[result.size()][3];
                         for (Map map : result) {
                             rows[count][0] = String.valueOf(resultSize);
-                            rows[count][1] = String.valueOf(map.get("\"Time\""));
-                            rows[count][2] = String.valueOf(map.get("\"ID\""));
+                            rows[count][1] = String.valueOf(map.get("Where"));
+                            rows[count][2] = String.valueOf(map.get("Time"));
 
                             count++;
                             resultSize--;
